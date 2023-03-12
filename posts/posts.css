@@ -9,5 +9,6 @@
 }
 
 .post-list {
-    list-style: none;
+    margin-left: 1em;
+    list-style: decimal-leading-zero;
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Erencan Ceyhan - Kut Dili</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="/navbar.css"/>
+        <link rel="stylesheet" href="/posts/post.css" />
+    </head>
+    <body>
+        <div>
+            <nav>
+                <a class="nav-link" href="/index.html">Giriş(Home)</a>
+                <a class="nav-link" href="/posts/posts.html">Gönderiler(Posts)</a>
+                <a class="nav-link" href="/about.html">Hakkımda(About)</a>
+            </nav>
+        </div>
+        <hr/>
+        <div>
+            <h1><em>Kut</em> Hakkında Birtakım Nedenler</h1>
+            <p>İlk "hoşgeldin-olmayan" gönderimle herkese selamlar. Bu gönderide, şu anda üzerinde çalışmakta olduğum "Kut" programlama dili ile iligili birtakım tercihlerimin nedenleri hakkında yazmak istiyorum.
+            </p>
+            <p>Bir programlama dili yapmak, özünde çok sayıda seçenek arasında belli tercihler yapıp bunları düzenli bir kalıbın içerisinde sunmak diyebiliriz şayet çok kaba bir özet geçmemiz gerekirse. Kut da elbette bu süreçten muaf değil kesinlikle. Bu gönderide, yapmış olduğum birkaç seçimle ilgili yazacağım.
+            </p>
+            <p>Muhtemelen bir programlama dili ile iligili neredeyse ilk tercih tip sistemi ile ilgili olacaktır. Tip sistemi ile ilgili en temel seçimler "statik-dinamik" ve "güçlü-zayıf" aralarındaki seçimler olacaktır. Öncelikle bu nitelikler hakkında ufak bir bilgi vermek gerekebilir.
+            </p>
+            <p>Statik tip sistemleri, neredeyse bütün derlenen dillerde ve bazı yorumlanan dilde kullanılan bir tip belirleme yöntemidir. Adında geçtiği gibi bu sistemde bir değişkenin türü, kodun içerisinde bellidir. C, C++, C#, Java, Rust, Zig, Pascal, Haskell, OcaML gibi birçok dil bu niteliğe sahiptir. <blockquote> Bu sistemde önemli bir nokta, türü <em>belirtme</em>nin aslında zorunlu olmamasıdır. Mesela birçok fonksiyonel programlama dili güçlü tür tahmin sistemlerine sahiptir. Haskell veya OcaML gibi dillerde program yazarken tür ismi yazmak pek sık gerçekleştirilen bir eylem değildir. Ancak programımızı derleyen veya çalıştıran sistem, kaynak kodunu gördüğünde herhangi bir ifadenin türünü bilecek kadar bilgiye sahiptir.</blockquote>
+            </p>
+            <p>Dinamik tip sistemleri ise bir bakıma bunun tersidir. Genellikle betik dillerinde yaygın olarak kullanılan bu sistemde ifadelerin türleri ancak kod yürütüldüğünde belli olur. Python, Lua, JavaScript gibi birçok dil bu sistemi kullanmaktadır. Kut için de ben bu sistemi tercih ettim. Bunun esas sebebi; dinamik türlerin, bilhassa programlama ile ciddi geçmişi olmayan insanlar için ciddi kolaylık sağlamasıdır. Dinamik türlerin temel götürüsü ise birçok hatanın da ancak derlenmeden sonra, yürütme esnasında fark edilebilmesidir. Bu sorun özellikle büyük ve karmaşık programlarda sıkıntıların öngörülmesinde ve düzeltilmesinde problemlere yol açmaktadır. Çözüm olarak, Python'da olduğu gibi isteğe bağlı tür belirtme ve bu türlerin uyumunu çalıştırmadan önce test etmeyi düşünüyorum fakat bu, ileri diyebileceğim bir hedef şimdilik.
+            </p>
+            <p>Güçlü ve zayıf türler ise biraz daha küçük farklılıklara sahip. Güçlü tür sistemlerinde bir değişken başka bir türde yorumlanamaz ve gerekli dönüşümler kastî bir şekilde gerçekleştirilmek zorundadır. Zayıf tür sistemleri ise gizli tür çevirmelerinin sık yaşanabildiği sistemlerdir. JavaScript ve C gibi diller zayıf tür sistemlerine sahipken C++ ve Python gibi dillerin tür sistemleri güçlüdür. Kut'ta da bu noktada, en azından dâhili türler içinde, güçlü bir türlemeye (bu kelimeyi kullanmamak için bayadır sabretmekteyim) sahip olmayı hedeflemekteyim. <code><em>"1" + 1</em></code> gibi ifadelerin (Kut'ta bu <code><em>("1" 1 +)</em></code> olmaktadır) hata vermesinin, alttan yapılan çevirmelere göre daha mantıklı olacağı kanaatindeyim.
+            </p>
+            <p>Elbette tür sistemi bir dilin tek kıstasları değil. Şimdi de, Kut'u piyasadaki neredeyse bütün dillerden ayıran özelliğine, yani yazım sıralamasına değinmek istiyorum. Aslına bakılırsa, Kut hakkında kafamda oluşan ilk nitelik bu olmuştur. Bunun temelinde ise Türkçe yatmakta. Hepimizin bildiği üzere Türkçe özne-tümleç-yüklem şeklinde bir öge sıralamasına sahip bir dildir. Bu sıralamaya sahip diller, tüm dillerin <a href="https://en.wikipedia.org/wiki/Subject%E2%80%93object%E2%80%93verb_word_order#Incidence">%45</a>'i ile dünyadaki doğal insan dillerinin çoğunluğunu oluşturmaktadır. Ancak programlama ile uğraşan neredeyse herkesin fark edebileceği üzere, programlama dilleri neredeyse tamamen İngilizce tabanlıdır. Programlama dillerinin İngilizce olmasının, zamanında Britanya sömürgesi olmamış ve aynı aileden (Hint-Avrupa dil ailesi) bir dil konuşmayan insanlar için kelime açısından bir engel oluşturmasının yanı sıra, ifade kurulum mantığı olarak da bir tersliğe de neden olmaktadır. Yüklem ile tümlecin yer değiştirmesi çoğunlukla tek başına olmamakta, diğer birçok dilbilgisel yapının kurulum biçimini de değiştirmektedir. Birçok Türkçe programlama dili denemesi ise sözcükleri Türkçeleştirilmiş İngilizce programlama dili olarak kalmaktadır. Kut'ta ise bu hatalara mümkün olduğunca düşmemeye çalıştım. Elbette dilin Türkçe okumasının kolay olması programlamanın algoritma oluşturma gibi temel gereksinimlerinde herhangi bir değişiklik yapmamaktadır. Mesele, Türkçe konuşan ve İngilizce bilmeyen insanlar için, İngilizce için Python ne ise onun gibi yazımı ve geliştirmesi kolay bir dil üretme meselesidir. Elbette bunda dilin temel amacı -bir oyunda bir bakıma betikleme dili olarak kullanılmak- olması da etkilidir. Üstteki örnekte de görebileceğimiz üzere temel matematik işlemleri dahi alıştığımızın dışında bir sözdizimi ile yapılmaktadır. Aslında bu dizilim, ifadeyi Türkçe okuyunca çok daha anlamlı hâle gelmektedir. Örneğin <code><em>((1 (2 3 *) +) sin)</em></code> ifadesini (ifadenin hesapladığı değer önemsiz olmak üzere) <em>"&lt;1&gt;'e &lt;2&gt; ile &lt;3&gt;'ün &lt;çarp&gt;ımını &lt;ekle&gt;yip &lt;sinüs&gt;ünü al"</em> olarak okuduğumuzda görebiliriz ki &lt;&gt; içerisindeki ifadeler, koddaki parçalar (tokenler) ile birebir eşleşmektedir. İngilizce'nin emir kipi ile eşleşen <a href="https://en.wikipedia.org/wiki/Polish_notation">Lehçe/önek notasyonu</a> ve genel İngilizce sıralaması ile eşleşen <a href="https://en.wikipedia.org/wiki/Infix_notation">araek notasyonu</a>ndan farklı olan <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Ters Lehçe/sonek notasyonu</a> olarak bilinen bu biçim, Türkçenin yapısını çok daha iyi yansıtmaktadır. Akışı <em>doğal</em> gelen bir programlama dili için de bu yapının oldukça önemli olduğunu düşünüyorum. Bunun yanısıra, şayet her bir işlemin kaç girdi alacağı önceden belli olsaydı Kut'ta, hiç parantez kullanmadan her türlü programı yazabiliyor olacaktık. Fakat başka bir tercihimden ötürü bu ne yazık ki Kut'ta mümkün değil.
+            </p>
+            <p>Bunlar Kut için yaptığım üç adet temel <em>tercih</em>. Elbette bir programlama dili yazacak birisi bunları tercih etmeyebilir, aynısını kolay kolay da tercih etmeyecektir. Keza bunlar, dilin iskeletini ancak belirlemeyi sağlar. Bunların dışında daha birçok özellik mevcut ancak bunları kendilerine ait gönderilerde, zaman içerisinde paylaşmanın daha iyi olacağı kanısındayım. İyi günler dilerim.</p>
+        </div>
+    </body>
+    <footer>
+        <a class="nav-link" href="../01-Merhaba/index.html">Önceki</a>
+    </footer>
+</html>
