@@ -13,7 +13,7 @@ nav {
 }
 
 .nav-link {
-    transition: var(--navbar-hover-animation-duration);
+    transition: background-color var(--navbar-hover-animation-duration);
     padding: 5px;
     color: white;
     background-color: blue;
