@@ -4,7 +4,13 @@
 
 body {
     font-family: monospace;
-    font-size: max(1vw, 1vh);
+    font-size: 1vw;
+}
+
+@media only screen and (orientation: portrait) {
+    body {
+        font-size: 2vh;
+    }
 }
 
 nav {
