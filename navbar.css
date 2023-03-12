@@ -1,0 +1,28 @@
+:root {
+    --navbar-hover-animation-duration: 0.5s;
+}
+
+body {
+    font-family: monospace;
+    font-size: 1vw;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    transition: var(--navbar-hover-animation-duration);
+    padding: 5px;
+    color: white;
+    background-color: blue;
+    text-decoration: none;
+    margin: 1px;
+    border: 5px outset black;
+}
+
+.nav-link:hover {
+    transition: var(--navbar-hover-animation-duration);
+    background-color: darkred;
+}
