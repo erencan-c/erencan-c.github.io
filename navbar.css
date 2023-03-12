@@ -4,7 +4,7 @@
 
 body {
     font-family: monospace;
-    font-size: 1vw;
+    font-size: max(1vw, 1vh);
 }
 
 nav {
