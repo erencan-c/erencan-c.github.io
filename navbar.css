@@ -18,8 +18,13 @@ nav {
     flex-wrap: wrap;
 }
 
+@media (hover: hover) {
+    .nav-link {
+        transition: background-color var(--navbar-hover-animation-duration);
+    }
+}
+
 .nav-link {
-    transition: background-color var(--navbar-hover-animation-duration);
     padding: 5px;
     color: white;
     background-color: blue;
@@ -28,7 +33,9 @@ nav {
     border: 5px outset black;
 }
 
-.nav-link:hover {
-    transition: var(--navbar-hover-animation-duration);
-    background-color: darkred;
+@media (hover: hover) {
+    .nav-link:hover {
+        transition: var(--navbar-hover-animation-duration);
+        background-color: darkred;
+    }
 }
