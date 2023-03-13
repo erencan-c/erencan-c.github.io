@@ -16,8 +16,9 @@
 }
 
 body {
-    font-family: monospace;
-    font-size: var(--responsive-font-size);
+    font-family: monospace !important;
+    font-size: var(--responsive-font-size) !important;
+    background-color: #c0c0c0;
 }
 
 nav {
@@ -26,25 +27,11 @@ nav {
     flex-direction: row;
 }
 
-@media (hover: hover) {
-    .nav-link {
-        transition: background-color var(--navbar-hover-animation-duration);
-    }
-}
-
 .nav-link {
-    width: calc(6 * var(--responsive-font-size));
-    padding: 5px;
-    color: white;
-    background-color: blue;
-    text-decoration: none;
-    margin: 1px;
-    border: 5px outset black;
+    /* width: calc(6 * var(--responsive-font-size)); */
 }
 
-@media (hover: hover) {
-    .nav-link:hover {
-        transition: var(--navbar-hover-animation-duration);
-        background-color: darkred;
-    }
+button {
+    font-family: monospace !important;
+    font-size: var(--responsive-font-size) !important;
 }

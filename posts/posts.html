@@ -3,28 +3,33 @@
     <head>
         <title>Erencan Ceyhan - Gönderiler</title>
         <meta charset="utf-8"/>
+        <link rel="stylesheet" href="https://unpkg.com/98.css"/>
         <link rel="stylesheet" href="/navbar.css"/>
         <link rel="stylesheet" href="/posts/posts.css"/>
     </head>
     <body>
         <div>
             <nav>
-                <a class="nav-link" href="/index.html">Giriş</a>
-                <a class="nav-link" href="/posts/posts.html">Gönderiler</a>
-                <a class="nav-link" href="/about.html">Hakkımda</a>
+                <a class="nav-link" href="/index.html"><button>Giriş</button></a>
+                <a class="nav-link" href="/posts/posts.html"><button>Gönderiler</button></a>
+                <a class="nav-link" href="/about.html"><button>Hakkımda</button></a>
             </nav>
         </div>
         <hr/>
         <div>
             <ul class="year-list">
-                <li>2023</li>
-                <ul class="month-list">
-                    <li>03</li>
-                    <ol class="post-list">
-                        <li><a href="/posts/2023/03/01-Merhaba/index.html">Merhaba</a></li>
-                        <li><a href="/posts/2023/03/02-Kut Dili/index.html">Kut Dili</a></li>
-                    </ol>
-                </ul>
+                <details>
+                    <summary>2023</summary>
+                    <ul class="month-list">
+                        <details>
+                        <summary>03</summary>
+                            <ol class="post-list">
+                                <li><a class="nav-link" href="/posts/2023/03/01-Merhaba/index.html">Merhaba</a></li>
+                                <li><a class="nav-link" href="/posts/2023/03/02-Kut Dili/index.html">Kut Dili</a></li>
+                            </ol>
+                        </details>
+                    </ul>
+                </details>
             </ul>
         </div>
     </body>
