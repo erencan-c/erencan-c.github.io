@@ -2,20 +2,28 @@
     --navbar-hover-animation-duration: 0.5s;
 }
 
-body {
-    font-family: monospace;
-    font-size: 1vw;
-}
 
 @media only screen and (orientation: portrait) {
-    body {
-        font-size: 2vh;
+    :root {
+        --responsive-font-size: 2vh;
     }
 }
 
+@media only screen and (orientation: landscape) {
+    :root {
+        --responsive-font-size: 1vw;
+    }
+}
+
+body {
+    font-family: monospace;
+    font-size: var(--responsive-font-size);
+}
+
 nav {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
+    flex-direction: row;
 }
 
 @media (hover: hover) {
@@ -25,6 +33,7 @@ nav {
 }
 
 .nav-link {
+    width: calc(6 * var(--responsive-font-size));
     padding: 5px;
     color: white;
     background-color: blue;
