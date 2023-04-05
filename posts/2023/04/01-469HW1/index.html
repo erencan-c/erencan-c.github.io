@@ -20,7 +20,8 @@
             <h3>CENG469 - Homework 1 - Blog Post</h3>
             <p>Hello everybody! Welcome to my post about the first homework of CENG469 (Graphics II).</p>
             <p>First of all, I need to say that my homework is not completely done. Well, it is sort of done but lighting is very bad right now. I haven't been able to find the reason for this, but even though Bezier equations work more-or-less correctly, either the normal calculation or light calculation does not work. Now, it looks like this (from <code>input3.txt</code>):</p>
-            <img src="./1.png">
+            <img src="./1.png" width="100%"/>
+            <figcaption>Figure 1: input3.txt rendered in my computer</figcaption>
             <p>The bright part is not caused by specular shading and I couldn't understand whether it works or not. However, I definitely know that diffuse shading does not work. As I said before, I don't know the reason, yet alone the solution.</p>
             <p>Even though I wasn't able to do lighting properly, I think that the rendering is not done badly. I used a <em>single</em> draw call each frame no matter what tesellation or surface count is.</p>
             <p>How I achieve is simple: just allocating enough vertices and faces for 80x80 sampling for every surface defined in the input. The number of surfaces does not change throughout the program's lifetime and sampling number cannot exceed 80, so I can just allocate once. This makes it possible to render a single instance of vertices and calculate everything else except lighting in the vertex shader. The reason why I did not use multi-instance rendering is that, well, I learnt its existance pretty late. But it would probably be still worse, since GPU must allocate enough vertices for all the instances, but in my case I just calculate every vertex; hence, there is no need for GPU to manage memory after the first allocation. I did not test instanced rendering, but intuition says this. Still, even on WSL, the program is pretty responsive and my computer's GPU is actually weaker than GPUs of Inek machines (mine is Intel Xe, Ineks use Quadro P2200), so I don't think responsiveness would be a problem. As I will come to Ankara much later than the due-date-with-late-days of the homework, I cannot properly test the visuals of the program.</p>
@@ -28,6 +29,18 @@
             <p>Implementing the surface equation was pretty easy. However, I did not use Bernstein polynomials. I actually used the matrix formula of <em>Qz(s,t)</em> in the slides. This gave me probably correct (at least correct looking) results. However, its mathematical derivative gave me wrong answer, probably. As I said, there is some lighting problem and it's totally possible that it is caused by normal calculation, which I do by just cross producting the tangent vectors. I also did this using querying <em>epsilon</em>-far points in the curve and calculating tangents (basically taking numerical derivative), but I cannot say whether it was working or not since adding inverse-square-law to the lighting shader was later than switching to mathematical derivative.</p>
             <p>Implementing parser was very easy, probably the easiest part in the homework, and I take OpenGL rendering code from CENG477 HW3, since it is good enough and I did not want to dive into low-level OpenGL code when I can just re-use the code I wrote before.</p>
             <p>As actual sample count does not depend on sample count, there should not be any observable performance difference with different sample count parameters.</p>
+            <p>The method I used to create samples creates problem in machines other than mine. I don't know the exact reason, and I cannot do anything since as I said before I won't be in Ankara before the deadline so that I can only test on my own machine, yet the shapes are still more-or-less true. However, the program should probably have an epilepsy warning before opening it.</p>
+            <p>Speaking of epilepsy, in development, I once forgot to set <code>gl_Position</code> for vertices exceeding the sample count. And this created random (for some reason) all green triangles. As the positions are unitialized memory in the VRAM of GPU, the triangles' positions just randomly changed between frames and the changes were extreme. This resulted in epilepsy-triggering visuals like this:</p>
+            <video width="100%" controls="controls"><source src="./1.mp4" type="video/mp4"/></video>
+            <figcaption>Video 1: Unitialized Memory</figcaption>
+            <p>Even though I do not have epilepsy, my head still hurted after recording the video.</p>
+            <p>Here is my test for multiple surfaces. Note that I used <code>y=x^2</code> equation to get vertical values in this, the next and the previous tests. The colors also depend on the row and column position of the surface. I call this image "Halay Çeken x^2'ler"</p>
+            <img src="./2.jpg" width="100%"/>
+            <figcaption>Figure 2: Halay Çeken x^2'ler</figcaption>
+            <p>Here is what I call "Hills of x^2", previous image with bigger <code>coordMultiplier</code> and a slightly different angle, resembling some generic Synthwave background image:</p>
+            <img src="3.jpg" width="100%"/>
+            <figcaption>Figure 3: Hills of x^2</figcaption>
+            <p>And here goes the blog post. Thank you for reading this. </p>
         </div>
     </body>
 </html>
