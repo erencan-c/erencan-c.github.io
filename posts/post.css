@@ -1,3 +1,10 @@
 img {
     border: 5px ridge black;
 }
+
+@media only screen and (orientation: landscape) {
+    body {
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+}
