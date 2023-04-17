@@ -218,6 +218,7 @@ function clickPop() {
     else {
         buf = '';
     }
+    syncBuffer();
 }
 function clickSwap() {
     var second = c.stack.pop();

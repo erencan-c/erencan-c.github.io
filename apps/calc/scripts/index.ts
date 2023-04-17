@@ -228,6 +228,7 @@ function clickPop() {
     } else {
         buf = '';
     }
+    syncBuffer();
 }
 
 function clickSwap() {
