@@ -1,27 +1,64 @@
-@media only screen and (orientation: landscape) {
-    button {
-        width: 3vw;
-        height: 3vw;
-        font-size: 2vw;
-        border: none;
-        border-radius: 3vw;
-    }
+button {
+    width: 100%;
+    font-size: 2em;
+    border: none;
+    border-radius: 100%;
+    display: inline-block;
+    /* aspect-ratio: 1/1; */
+}
 
-    input, textarea {
-        width: 12vw;
+textarea {
+    width: 100%;
+    font-size: 2em;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+textarea {
+    resize: none;
+    height: 100%;
+}
+
+body {
+    margin: 0px;
+}
+
+html,body,#buttons {
+    height: 100%;
+}
+
+@media only screen and (orientation: landscape) {
+    #inputs {
+        display: flex;
+        height: 90%;
+    }
+    #buf {
+        height: 10%;
     }
 }
 
 @media only screen and (orientation: portrait) {
-    button {
-        width: 3vh;
-        height: 3vh;
-        font-size: 2vh;
-        border: none;
-        border-radius: 3vh;
+    #inputs {
+        display: flex;
+        height: 50%;
     }
+    #buf {
+        height: 50%;
+        font-size: 5em;
+    }
+}
 
-    input, textarea {
-        width: 12vh;
-    }
+
+#buttons {
+    width: 85%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+#out-container {
+    width: 15%;
+    height: 100%;
 }

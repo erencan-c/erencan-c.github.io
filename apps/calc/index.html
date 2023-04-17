@@ -3,42 +3,42 @@
     <head>
         <title>Calculator</title>
         <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width"/>
         <script src="scripts/index.js" defer="defer"></script>
         <link rel="stylesheet" href="index.css"/>
     </head>
     <body>
-        <div>
-            <input id="buf" disabled="disabled" value="zort"/>
-        </div>
-        <div>
-            <button onclick="click7()">7</button>
-            <button onclick="click8()">8</button>
-            <button onclick="click9()">9</button>
-            <button onclick="clickPlus()">+</button>
-        </div>
+        <textarea id="buf" disabled="disabled" value="zort"></textarea>
+        <div id="inputs">
+            <div id="out-container">
+                <textarea id="out" disabled="disabled" value="zort"></textarea>
+            </div>
+            <div id="buttons">
+                <button id="button-clear" onclick="clickClear()">Clear</button>
+                <button id="button-pop" onclick="clickPop()">Pop</button>
+                <button id="button-swap" onclick="clickSwap()">Swap</button>
+                <button id="button-more" onclick="clickMore()">More</button>
+                
+                <button id="button-7" onclick="click7()">7</button>
+                <button id="button-8" onclick="click8()">8</button>
+                <button id="button-9" onclick="click9()">9</button>
+                <button id="button-plus" onclick="clickPlus()">+</button>
 
-        <div>
-            <button onclick="click4()">4</button>
-            <button onclick="click5()">5</button>
-            <button onclick="click6()">6</button>
-            <button onclick="clickMinus()">-</button>
-        </div>
+                <button id="button-4" onclick="click4()">4</button>
+                <button id="button-5" onclick="click5()">5</button>
+                <button id="button-6" onclick="click6()">6</button>
+                <button id="button-minus" onclick="clickMinus()">-</button>
 
-        <div>
-            <button onclick="click1()">1</button>
-            <button onclick="click2()">2</button>
-            <button onclick="click3()">3</button>
-            <button onclick="clickStar()">*</button>
-        </div>
+                <button id="button-1" onclick="click1()">1</button>
+                <button id="button-2" onclick="click2()">2</button>
+                <button id="button-3" onclick="click3()">3</button>
+                <button id="button-star" onclick="clickStar()">*</button>
 
-        <div>
-            <button onclick="clickDot()">.</button>
-            <button onclick="click0()">0</button>
-            <button onclick="clickEqual()">=</button>
-            <button onclick="clickDiv()">/</button>
-        </div>
-        <div>
-            <textarea id="out" disabled="disabled" value="zort"></textarea>
+                <button id="button-dot" onclick="clickDot()">.</button>
+                <button id="button-0" onclick="click0()">0</button>
+                <button id="button-equal" onclick="clickEqual()">=</button>
+                <button id="button-div" onclick="clickDiv()">/</button>
+            </div>
         </div>
     </body>
 </html>

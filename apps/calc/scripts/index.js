@@ -117,6 +117,12 @@ var Calculator = /** @class */ (function () {
                 self.stack.push(first + second);
             }
             else {
+                if (first) {
+                    self.stack.push(first);
+                }
+                if (second) {
+                    self.stack.push(second);
+                }
                 throw new Error("Unsupported operand types: ".concat(typeof (first), " ").concat(typeof (second), " +"));
             }
         },
@@ -130,6 +136,12 @@ var Calculator = /** @class */ (function () {
                 self.stack.push(first - second);
             }
             else {
+                if (first) {
+                    self.stack.push(first);
+                }
+                if (second) {
+                    self.stack.push(second);
+                }
                 throw new Error("Unsupported operand types: ".concat(typeof (first), " ").concat(typeof (second), " -"));
             }
         },
@@ -149,6 +161,12 @@ var Calculator = /** @class */ (function () {
                 self.stack.push(second.mul(first));
             }
             else {
+                if (first) {
+                    self.stack.push(first);
+                }
+                if (second) {
+                    self.stack.push(second);
+                }
                 throw new Error("Unsupported operand types: ".concat(typeof (first), " ").concat(typeof (second), " *"));
             }
         },
@@ -165,6 +183,12 @@ var Calculator = /** @class */ (function () {
                 self.stack.push(second.div(first));
             }
             else {
+                if (first) {
+                    self.stack.push(first);
+                }
+                if (second) {
+                    self.stack.push(second);
+                }
                 throw new Error("Unsupported operand types: ".concat(typeof (first), " ").concat(typeof (second), " /"));
             }
         },
@@ -179,9 +203,35 @@ function syncBuffer() {
     bufText.value = buf;
     outText.value = '';
     for (var i = c.stack.length - 1; i >= 0; i--) {
-        outText.value += "".concat(String(c.stack[i]), "\n");
+        outText.value += "".concat(String(c.stack[i]), "\n\n");
     }
-    outText.style.height = (c.stack.length + 1) * fontSize + 'px';
+}
+function clickClear() {
+    buf = '';
+    syncBuffer();
+}
+function clickPop() {
+    var popped = c.stack.pop();
+    if (popped) {
+        buf = popped.toString();
+    }
+    else {
+        buf = '';
+    }
+}
+function clickSwap() {
+    var second = c.stack.pop();
+    if (!second) {
+        return;
+    }
+    var first = c.stack.pop();
+    if (!first) {
+        c.stack.push(second);
+        return;
+    }
+    c.stack.push(second);
+    c.stack.push(first);
+    syncBuffer();
 }
 function click7() {
     buf += '7';

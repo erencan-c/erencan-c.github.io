@@ -113,6 +113,12 @@ class Calculator {
             } else if(typeof(first) === 'number' && typeof(second) === 'number') {
                 self.stack.push(first + second);
             } else {
+                if(first) {
+                    self.stack.push(first);
+                }
+                if(second) {
+                    self.stack.push(second);
+                }
                 throw new Error(`Unsupported operand types: ${typeof(first)} ${typeof(second)} +`);
             }
         },
@@ -126,6 +132,12 @@ class Calculator {
             } else if(typeof(first) === 'number' && typeof(second) === 'number') {
                 self.stack.push(first - second);
             } else {
+                if(first) {
+                    self.stack.push(first);
+                }
+                if(second) {
+                    self.stack.push(second);
+                }
                 throw new Error(`Unsupported operand types: ${typeof(first)} ${typeof(second)} -`);
             }
         },
@@ -143,6 +155,12 @@ class Calculator {
             } else if(typeof(first) === 'number' && second instanceof Matrix) {
                 self.stack.push(second.mul(first));
             } else {
+                if(first) {
+                    self.stack.push(first);
+                }
+                if(second) {
+                    self.stack.push(second);
+                }
                 throw new Error(`Unsupported operand types: ${typeof(first)} ${typeof(second)} *`);
             }
         },
@@ -158,6 +176,12 @@ class Calculator {
             } else if(typeof(first) === 'number' && second instanceof Matrix) {
                 self.stack.push(second.div(first));
             } else {
+                if(first) {
+                    self.stack.push(first);
+                }
+                if(second) {
+                    self.stack.push(second);
+                }
                 throw new Error(`Unsupported operand types: ${typeof(first)} ${typeof(second)} /`);
             }
         },
@@ -188,9 +212,37 @@ function syncBuffer() {
     bufText.value = buf;
     outText.value = '';
     for(let i = c.stack.length-1; i >= 0; i--) {
-        outText.value += `${String(c.stack[i])}\n`;
+        outText.value += `${String(c.stack[i])}\n\n`;
     }
-    outText.style.height = (c.stack.length+1)*fontSize + 'px';
+}
+
+function clickClear() {
+    buf = ''
+    syncBuffer();
+}
+
+function clickPop() {
+    let popped = c.stack.pop();
+    if(popped) {
+        buf = popped.toString();
+    } else {
+        buf = '';
+    }
+}
+
+function clickSwap() {
+    let second = c.stack.pop();
+    if(!second) {
+        return;
+    }
+    let first = c.stack.pop();
+    if(!first) {
+        c.stack.push(second);
+        return;
+    }
+    c.stack.push(second);
+    c.stack.push(first);
+    syncBuffer();
 }
 
 function click7() {
