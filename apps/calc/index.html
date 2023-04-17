@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Calculator</title>
+        <meta charset="utf-8"/>
+        <script src="scripts/index.js" defer="defer"></script>
+        <link rel="stylesheet" href="index.css"/>
+    </head>
+    <body>
+        <div>
+            <input id="buf" disabled="disabled" value="zort"/>
+        </div>
+        <div>
+            <button onclick="click7()">7</button>
+            <button onclick="click8()">8</button>
+            <button onclick="click9()">9</button>
+            <button onclick="clickPlus()">+</button>
+        </div>
+
+        <div>
+            <button onclick="click4()">4</button>
+            <button onclick="click5()">5</button>
+            <button onclick="click6()">6</button>
+            <button onclick="clickMinus()">-</button>
+        </div>
+
+        <div>
+            <button onclick="click1()">1</button>
+            <button onclick="click2()">2</button>
+            <button onclick="click3()">3</button>
+            <button onclick="clickStar()">*</button>
+        </div>
+
+        <div>
+            <button onclick="clickDot()">.</button>
+            <button onclick="click0()">0</button>
+            <button onclick="clickEqual()">=</button>
+            <button onclick="clickDiv()">/</button>
+        </div>
+        <div>
+            <textarea id="out" disabled="disabled" value="zort"></textarea>
+        </div>
+    </body>
+</html>

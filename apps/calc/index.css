@@ -1,0 +1,27 @@
+@media only screen and (orientation: landscape) {
+    button {
+        width: 3vw;
+        height: 3vw;
+        font-size: 2vw;
+        border: none;
+        border-radius: 3vw;
+    }
+
+    input, textarea {
+        width: 12vw;
+    }
+}
+
+@media only screen and (orientation: portrait) {
+    button {
+        width: 3vh;
+        height: 3vh;
+        font-size: 2vh;
+        border: none;
+        border-radius: 3vh;
+    }
+
+    input, textarea {
+        width: 12vh;
+    }
+}
