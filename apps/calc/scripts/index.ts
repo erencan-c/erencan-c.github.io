@@ -1,5 +1,7 @@
 'use strict';
 
+document.documentElement.requestFullscreen();
+
 class Matrix {
     row: number;
     col: number;
