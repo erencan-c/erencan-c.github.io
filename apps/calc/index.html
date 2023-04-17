@@ -5,39 +5,77 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width"/>
         <script src="scripts/index.js" defer="defer"></script>
+        <script src="scripts/normal_callbacks.js" defer="defer"></script>
+        <script src="scripts/more_callbacks.js" defer="defer"></script>
         <link rel="stylesheet" href="index.css"/>
     </head>
     <body>
         <textarea id="buf" disabled="disabled" value="zort"></textarea>
+        <textarea id="out" disabled="disabled" value="zort"></textarea>
         <div id="inputs">
-            <div id="out-container">
-                <textarea id="out" disabled="disabled" value="zort"></textarea>
-            </div>
-            <div id="buttons">
-                <button id="button-clear" onclick="clickClear()">Clear</button>
+            <div class="buttons">
+                <button id="button-clear" onclick="clickClear()">C</button>
                 <button id="button-pop" onclick="clickPop()">Pop</button>
-                <button id="button-swap" onclick="clickSwap()">Swap</button>
-                <button id="button-more" onclick="clickMore()">More</button>
+                <button id="button-swap" onclick="clickSwap()">⇅</button>
+                <button id="button-more" onclick="clickMore()">...</button>
+                <button id="button-erase" onclick="clickErase()">⇦</button>
                 
                 <button id="button-7" onclick="click7()">7</button>
                 <button id="button-8" onclick="click8()">8</button>
                 <button id="button-9" onclick="click9()">9</button>
                 <button id="button-plus" onclick="clickPlus()">+</button>
+                <button id="button-matrix">[]</button>
 
                 <button id="button-4" onclick="click4()">4</button>
                 <button id="button-5" onclick="click5()">5</button>
                 <button id="button-6" onclick="click6()">6</button>
                 <button id="button-minus" onclick="clickMinus()">-</button>
+                <button id="button-func">f(x)</button>
 
                 <button id="button-1" onclick="click1()">1</button>
                 <button id="button-2" onclick="click2()">2</button>
                 <button id="button-3" onclick="click3()">3</button>
                 <button id="button-star" onclick="clickStar()">*</button>
-
+                <button></button>
+                
                 <button id="button-dot" onclick="clickDot()">.</button>
                 <button id="button-0" onclick="click0()">0</button>
-                <button id="button-equal" onclick="clickEqual()">=</button>
+                <button id="button-equal" onclick="clickEqual()">Push</button>
                 <button id="button-div" onclick="clickDiv()">/</button>
+                <button id="button-clear-stack" onclick="clickClearStack()">CS</button>
+            </div>
+        </div>
+        <div id="more-inputs" hidden="hidden">
+            <div class="buttons">
+                <button id="button2-clear" onclick="clickClear()">C</button>
+                <button id="button2-pop" onclick="clickPop()">Pop</button>
+                <button id="button2-swap" onclick="clickSwap()">⇅</button>
+                <button id="button2-less" onclick="clickLess()">...</button>
+                <button id="button2-erase" onclick="clickErase()">⇦</button>
+                
+                <button id="button2-sin" onclick="clickSin()">sin</button>
+                <button id="button2-cos" onclick="clickCos()">cos</button>
+                <button id="button2-tan" onclick="clickTan()">tan</button>
+                <button id="button2-cot" onclick="clickCot()">cot</button>
+                <button id="button2-"></button>
+
+                <button id="button2-asin" onclick="clickAsin()">asin</button>
+                <button id="button2-acos" onclick="clickAcos()">acos</button>
+                <button id="button2-atan" onclick="clickAtan()">atan</button>
+                <button id="button2-atan2" onclick="clickAtan2()">atan2</button>
+                <button id="button2-acot" onclick="clickAcot()">acot</button>
+
+                <button id="button2-exp" onclick="clickExp()">exp</button>
+                <button id="button2-log" onclick="clickLog()">log</button>
+                <button id="button2-ln" onclick="clickLn()">ln</button>
+                <button id="button2-sqr" onclick="clickSqr()">sqr</button>
+                <button id="button2-sqrt" onclick="clickSqrt()">√</button>
+
+                <button id="button2-yroot" onclick="clickYroot()">y√</button>
+                <button id="button2-pow" onclick="clickPow()">pow</button>
+                <button id="button2-pi" onclick="clickPi()">π</button>
+                <button id="button2-e" onclick="clickE()">e</button>
+                <button id="button2-clear-stack" onclick="clickClearStack()">CS</button>
             </div>
         </div>
     </body>

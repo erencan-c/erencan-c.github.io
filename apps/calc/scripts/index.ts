@@ -205,6 +205,8 @@ class Calculator {
 let buf = ""
 let bufText = document.getElementById("buf") as HTMLInputElement;
 let outText = document.getElementById("out") as HTMLInputElement;
+let normal_inputs = document.getElementById('inputs') as HTMLDivElement;
+let more_inputs = document.getElementById('more-inputs') as HTMLDivElement;
 
 function syncBuffer() {
     const fontSize = parseFloat(window.getComputedStyle(outText, null).getPropertyValue('font-size')) + 1;
@@ -212,137 +214,52 @@ function syncBuffer() {
     bufText.value = buf;
     outText.value = '';
     for(let i = c.stack.length-1; i >= 0; i--) {
-        outText.value += `${String(c.stack[i])}\n\n`;
+        outText.value += `${String(c.stack[i])}\n`;
     }
 }
 
-function clickClear() {
-    buf = ''
-    syncBuffer();
-}
-
-function clickPop() {
-    let popped = c.stack.pop();
-    if(popped) {
-        buf = popped.toString();
-    } else {
+function pushBuffer() {
+    if(buf !== '') {
+        c.evaluate(buf);
         buf = '';
     }
-    syncBuffer();
 }
 
-function clickSwap() {
-    let second = c.stack.pop();
-    if(!second) {
+type CalculatorPredicate = (v: CalculatorValue) => boolean;
+type CalculatorUnaryOperation = (v: CalculatorValue) => CalculatorValue;
+type CalculatorBinaryOperation = (lhs: CalculatorValue, rhs: CalculatorValue) => CalculatorValue;
+
+function applyUnary(operation: CalculatorUnaryOperation, predicate?: CalculatorPredicate) {
+    let val = c.stack.pop();
+    if(val) {
+        if(!predicate || predicate(val)) {
+            c.stack.push(operation(val));
+        } else {
+            c.stack.push(val);
+        }
+    }
+}
+
+function applyBinary(operation: CalculatorBinaryOperation, predicateLhs?: CalculatorPredicate, predicateRhs?: CalculatorPredicate) {
+    let rhs = c.stack.pop();
+    if(!rhs) {
         return;
     }
-    let first = c.stack.pop();
-    if(!first) {
-        c.stack.push(second);
+    let lhs = c.stack.pop();
+    if(!lhs) {
+        c.stack.push(rhs);
         return;
     }
-    c.stack.push(second);
-    c.stack.push(first);
-    syncBuffer();
-}
-
-function click7() {
-    buf += '7';
-    syncBuffer();
-}
-
-function click8() {
-    buf += '8';
-    syncBuffer();
-}
-
-function click9() {
-    buf += '9';
-    syncBuffer();
-}
-
-function clickPlus() {
-    if(buf !== '') {
-        c.evaluate(buf);
-        buf = '';
+    if(!predicateLhs) {
+        c.stack.push(operation(lhs,rhs));
+        return;
     }
-    c.evaluate('+');
-    syncBuffer();
-}
-
-function click4() {
-    buf += '4';
-    syncBuffer();
-}
-
-function click5() {
-    buf += '5';
-    syncBuffer();
-}
-
-function click6() {
-    buf += '6';
-    syncBuffer();
-}
-
-function clickMinus() {
-    if(buf !== '') {
-        c.evaluate(buf);
-        buf = '';
+    if(!predicateRhs) {
+        predicateRhs = predicateLhs;
     }
-    c.evaluate('-');
-    syncBuffer();
-}
-
-function click1() {
-    buf += '1';
-    syncBuffer();
-}
-
-function click2() {
-    buf += '2';
-    syncBuffer();
-}
-
-function click3() {
-    buf += '3';
-    syncBuffer();
-}
-
-function clickStar() {
-    if(buf !== '') {
-        c.evaluate(buf);
-        buf = '';
+    if(predicateLhs(lhs) && predicateRhs(rhs)) {
+        c.stack.push(operation(lhs,rhs));
     }
-    c.evaluate('*');
-    syncBuffer();
-}
-
-function clickDot() {
-    buf += '.';
-    syncBuffer();
-}
-
-function click0() {
-    buf += '0';
-    syncBuffer();
-}
-
-function clickEqual() {
-    if(buf !== '') {
-        c.evaluate(buf);
-        buf = ''
-    }
-    syncBuffer();
-}
-
-function clickDiv() {
-    if(buf !== '') {
-        c.evaluate(buf);
-        buf = '';
-    }
-    c.evaluate('/');
-    syncBuffer();
 }
 
 let c = new Calculator();

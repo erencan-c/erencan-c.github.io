@@ -198,123 +198,52 @@ var Calculator = /** @class */ (function () {
 var buf = "";
 var bufText = document.getElementById("buf");
 var outText = document.getElementById("out");
+var normal_inputs = document.getElementById('inputs');
+var more_inputs = document.getElementById('more-inputs');
 function syncBuffer() {
     var fontSize = parseFloat(window.getComputedStyle(outText, null).getPropertyValue('font-size')) + 1;
     bufText.value = buf;
     outText.value = '';
     for (var i = c.stack.length - 1; i >= 0; i--) {
-        outText.value += "".concat(String(c.stack[i]), "\n\n");
+        outText.value += "".concat(String(c.stack[i]), "\n");
     }
 }
-function clickClear() {
-    buf = '';
-    syncBuffer();
-}
-function clickPop() {
-    var popped = c.stack.pop();
-    if (popped) {
-        buf = popped.toString();
-    }
-    else {
+function pushBuffer() {
+    if (buf !== '') {
+        c.evaluate(buf);
         buf = '';
     }
-    syncBuffer();
 }
-function clickSwap() {
-    var second = c.stack.pop();
-    if (!second) {
+function applyUnary(operation, predicate) {
+    var val = c.stack.pop();
+    if (val) {
+        if (!predicate || predicate(val)) {
+            c.stack.push(operation(val));
+        }
+        else {
+            c.stack.push(val);
+        }
+    }
+}
+function applyBinary(operation, predicateLhs, predicateRhs) {
+    var rhs = c.stack.pop();
+    if (!rhs) {
         return;
     }
-    var first = c.stack.pop();
-    if (!first) {
-        c.stack.push(second);
+    var lhs = c.stack.pop();
+    if (!lhs) {
+        c.stack.push(rhs);
         return;
     }
-    c.stack.push(second);
-    c.stack.push(first);
-    syncBuffer();
-}
-function click7() {
-    buf += '7';
-    syncBuffer();
-}
-function click8() {
-    buf += '8';
-    syncBuffer();
-}
-function click9() {
-    buf += '9';
-    syncBuffer();
-}
-function clickPlus() {
-    if (buf !== '') {
-        c.evaluate(buf);
-        buf = '';
+    if (!predicateLhs) {
+        c.stack.push(operation(lhs, rhs));
+        return;
     }
-    c.evaluate('+');
-    syncBuffer();
-}
-function click4() {
-    buf += '4';
-    syncBuffer();
-}
-function click5() {
-    buf += '5';
-    syncBuffer();
-}
-function click6() {
-    buf += '6';
-    syncBuffer();
-}
-function clickMinus() {
-    if (buf !== '') {
-        c.evaluate(buf);
-        buf = '';
+    if (!predicateRhs) {
+        predicateRhs = predicateLhs;
     }
-    c.evaluate('-');
-    syncBuffer();
-}
-function click1() {
-    buf += '1';
-    syncBuffer();
-}
-function click2() {
-    buf += '2';
-    syncBuffer();
-}
-function click3() {
-    buf += '3';
-    syncBuffer();
-}
-function clickStar() {
-    if (buf !== '') {
-        c.evaluate(buf);
-        buf = '';
+    if (predicateLhs(lhs) && predicateRhs(rhs)) {
+        c.stack.push(operation(lhs, rhs));
     }
-    c.evaluate('*');
-    syncBuffer();
-}
-function clickDot() {
-    buf += '.';
-    syncBuffer();
-}
-function click0() {
-    buf += '0';
-    syncBuffer();
-}
-function clickEqual() {
-    if (buf !== '') {
-        c.evaluate(buf);
-        buf = '';
-    }
-    syncBuffer();
-}
-function clickDiv() {
-    if (buf !== '') {
-        c.evaluate(buf);
-        buf = '';
-    }
-    c.evaluate('/');
-    syncBuffer();
 }
 var c = new Calculator();

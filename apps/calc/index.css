@@ -1,15 +1,16 @@
 button {
     width: 100%;
-    font-size: 2em;
-    border: none;
+    font-size: 6vw;
+    border: 3px outset black;
     border-radius: 100%;
     display: inline-block;
-    /* aspect-ratio: 1/1; */
 }
 
 textarea {
-    width: 100%;
-    font-size: 2em;
+    font-size: 4vw;
+    font-family: monospace;
+    overflow: hidden;
+    resize: none;
 }
 
 * {
@@ -17,48 +18,29 @@ textarea {
     padding: 0;
 }
 
-textarea {
-    resize: none;
-    height: 100%;
-}
-
 body {
     margin: 0px;
 }
 
-html,body,#buttons {
-    height: 100%;
+html,body {
+    height: 100vh;
 }
 
-@media only screen and (orientation: landscape) {
-    #inputs {
-        display: flex;
-        height: 90%;
-    }
-    #buf {
-        height: 10%;
-    }
-}
-
-@media only screen and (orientation: portrait) {
-    #inputs {
-        display: flex;
-        height: 50%;
-    }
-    #buf {
-        height: 50%;
-        font-size: 5em;
-    }
+#buf {
+    width: 100vw;
+    height: 8vw;
+    font-size: 6vw;
 }
 
 
-#buttons {
-    width: 85%;
+.buttons {
+    width: 100vw;
+    height: 100vw;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, minmax(0,1fr));
 }
 
-#out-container {
-    width: 15%;
-    height: 100%;
+#out {
+    width: 100vw;
+    height: calc(100vh - 108vw);
 }
