@@ -58,7 +58,7 @@ static void check_gl(const std::string context) {
     }
 }
 #define check_gl(ctx) check_gl("(" + std::string(__FILE__) + ":" + std::to_string(__LINE__) + ") " + ctx)</pre>
-            <p>The macro makes it so that the file and the line the check is done is also given in the context string. This made it possible to copy pasting check_gls with same contexes, and then differentiating them in the output by file and line. Note that I added macro in the middle of development, so visuals from earlier work uses direct context message.</p>
+            <p>The macro makes it so that the file and the line the check is done is also given in the context string. This made it possible to copy pasting check_gls with same contexes, and then differentiating them in the output by file and line. Note that I added macro in the middle of development, so visuals from earlier work use direct context message.</p>
             <p>On top of that I wasn't been able to bind a cubemap texture so that I used some dirty tricks to sample in the fragment shader. Here is my fragment shader for dynamic cube map:</p>
             <pre>
 vec3 ray = reflect(vertex_position - eyepos, normalize(vertex_normal));
@@ -138,7 +138,7 @@ if(part == 0) {
             <p>As we can see, there are not too much differences between them. The dynamic cubemap being wrong is also a reason why we cannot see the difference clearly.</p>
             <hr/>
             <footer>Erencan CEYHAN<br/>
-                Date: 2023/05/10 - 23:44<br/>
+                Date: 2023/05/10 - 23:45<br/>
                 METUID: 2521342
             </footer>
         </div>
