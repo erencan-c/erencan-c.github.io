@@ -57,10 +57,8 @@ static void check_gl(const std::string context) {
         throw std::runtime_error(context + " Error: " + error_names[status]);
     }
 }
-
-#define check_gl(ctx) check_gl("(" + std::string(__FILE__) + ":" + std::to_string(__LINE__) + ") " + ctx)
-            </pre>
-            The macro makes it so that the file and the line the check is done is also given in the context string. This made it possible to copy pasting check_gls with same contexes, and then differentiating them in the output by file and line.
+#define check_gl(ctx) check_gl("(" + std::string(__FILE__) + ":" + std::to_string(__LINE__) + ") " + ctx)</pre>
+            <p>The macro makes it so that the file and the line the check is done is also given in the context string. This made it possible to copy pasting check_gls with same contexes, and then differentiating them in the output by file and line. Note that I added macro in the middle of development, so visuals from earlier work uses direct context message.</p>
             <p>On top of that I wasn't been able to bind a cubemap texture so that I used some dirty tricks to sample in the fragment shader. Here is my fragment shader for dynamic cube map:</p>
             <pre>
 vec3 ray = reflect(vertex_position - eyepos, normalize(vertex_normal));
@@ -120,8 +118,7 @@ if(part == 0) {
     frag_color += vec4(0.0f, 0.0f, 0.2f, 0.0f);
 } else {
     frag_color = vec4(0.05f, 0.05f, 0.05f, 1.0f);
-}
-            </pre>
+}</pre>
             <p>The component of the eye-to-fragment-position ray and its sign gives us the face we need to sample from. For example if x is positive and its absolute value is the biggest among the other components' absolute values, then we need to sample from positive-x face. If we make the x component exactly 1 (ray /= ray.x etc in the code), we can use the y and z as texture coordinates. However, they are between -1 and 1 now. We just compress them into [0,1] range with "(ray/2.0) + vec3(0.5f, 0.5f, 0.5f)". Now, the y and z components are the uv coordinates. We can do similar things for other faces. However, this rendering is not right, it is sometimes mirrored and sometimes rotated. I fixed them by observing the results of each face. The cubemap I used has pretty distinctive and asymmetric parts, which helped me a lot in this fix. Note that this fragment shader is <em>very</em> slow compared to a correct cubemap. Branches in GPUs are pretty bad after all.</p>
             <p>Unfortunately, this was not enough. The textures are rendered pretty much "zoomed" which I said at the start.</p>
             <video width="100%" controls="controls"><source src="./negative_uv.mp4" type="video/mp4"/></video>
@@ -141,7 +138,7 @@ if(part == 0) {
             <p>As we can see, there are not too much differences between them. The dynamic cubemap being wrong is also a reason why we cannot see the difference clearly.</p>
             <hr/>
             <footer>Erencan CEYHAN<br/>
-                Date: 2023/05/10 - 23:32<br/>
+                Date: 2023/05/10 - 23:40<br/>
                 METUID: 2521342
             </footer>
         </div>
