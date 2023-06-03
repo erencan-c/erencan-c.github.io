@@ -8,3 +8,7 @@ img, video {
         margin-right: 20%;
     }
 }
+
+pre {
+    white-space: pre-wrap;
+}

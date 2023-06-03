@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Erencan Ceyhan - CENG 469 HW3 - Blog Post</title>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="https://unpkg.com/98.css"/>
+        <link rel="stylesheet" href="/navbar.css"/>
+        <link rel="stylesheet" href="/posts/post.css" />
+    </head>
+    <body>
+        <div>
+            <nav>
+                <a class="nav-link" href="/index.html"><button>Ana Sayfa</button></a>
+                <a class="nav-link" href="/posts/posts.html"><button>Gönderiler</button></a>
+                <a class="nav-link" href="/about.html"><button>Hakkımda</button></a>
+            </nav>
+        </div>
+        <hr/>
+        <header>
+            <a class="nav-link" href="/posts/2023/05/01-CENG469-HW2"><button>Önceki</button></a>
+        </header>
+        <div>
+            <h3>CENG469 - Homework 3 - Blog Post</h3>
+            <p>Hello again, everybody! Welcome to my blog post for the last CENG469 homework!</p>
+            <p>Honestly, this homework was <em>way</em> easier compared to the other ones, in my opinion. Setting up the <em>glasses/goggles quad</em> was around half of the homework in my case. I did not even need to calculate which side of the cubemap I need to sample from, a simple division was enough to calculate the texture coordinates.</p>
+            <pre>vec3 ray = vertex_position.xyz;
+vec3 abs_ray = abs(ray);
+vec3 uvr = ray / max(abs_ray.x, max(abs_ray.y, abs_ray.z));
+vec4 cubemap_color = texture(cubemap, vec3(-uvr.x, uvr.yz));</pre>
+            <p>was enough to get the cubemap coordinates. Why I "normalized" (change the size of the vector to make at least one component 1 or -1) is that as the quad rotates, the vertex positions will no longer be on the faces of our imaginary cubemap. This was actually the first part that I did in the previous homework's dynamic cubemap calculation.</p>
+            <p>Note that the ray is only the vertex position. The camera position is not used here. The reason is that even though the quad rotates, it never moves in the space. I thought that it would be better to make the camera remain in the center. The reason is that I was too lazy to implement the quad movement.</p>
+            <p>Blending the cubemap color with the cloud color was pretty easy.</p>
+            <pre>vec4 color = raymarch(camera.position, normalize(ray));
+cubemap_color.a = 1.0f - color.a;
+frag_color = vec4(cubemap_color.rgb*cubemap_color.a + color.rgb*color.a, 1.0f);</pre>
+            <p>The ray marching function returns the RGBA color of the cloud. From there, it is easy to blend with another color.</p>
+            <p>The <code>raymarch</code> function just calls the <code>march_ray</code> function (umm, well,</p>
+            <blockquote>There are only two hard things in Computer Science, cache invalidation and naming things.<br/>
+                - Phil Karlton
+            </blockquote>
+            <p>), which calculates something like the <em>cloud density</em>, and also the moonlight color, and blends its output colors. It first decreases the previous steps' colors proportional to the opacity (or inversely proportional to the transparency), then adds the cloud and moonlight colors and then adds the effect to the alpha value. The <code>ray_march</code> function uses almost the same algorithm to blend the color of the moonlight.</p>
+            <pre>float march_ray(vec3 position, vec3 direction, float t, out vec3 moonlight_out) {
+    vec3 point = (position + direction*t)*PERLIN_MULTIPLIER;
+
+    vec4 moonlight = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    for(int i = SCATTER_STEP_COUNT-1; i >= 0; i--) {
+        float alpha = scatter_march_ray(point, MOON_DIRECTION, 1.0f/float(SCATTER_STEP_COUNT) * float(i));
+        float transparency = 1.0f - alpha;
+        moonlight.rgb *= transparency;
+        moonlight.rgb += MOONLIGHT;
+        moonlight.a *= transparency;
+    }
+    moonlight.a = 1.0f - moonlight.a;
+    moonlight.rgb *= moonlight.a;
+
+    float cloud_presence = noise(point);
+    moonlight_out = moonlight.rgb;
+    return cloud_presence;
+}
+
+vec4 raymarch(vec3 position, vec3 direction) {
+    vec4 ret = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    for(int i = STEP_COUNT-1; i >= 0; i--) {
+        vec3 moonlight = vec3(0.0f, 0.0f, 0.0f);
+        float alpha = march_ray(position, direction*STEP_COUNT/2.0f, 1.0f/float(STEP_COUNT) * float(i), moonlight);
+        float transparency = 1.0f - alpha;
+        ret.rgb *= transparency;
+        ret.rgb += CLOUD_COLOR + moonlight;
+        ret.a *= transparency;
+    }
+    ret.a = 1.0f - ret.a;
+    return ret;
+}</pre>
+            <p>The <code>noise</code> function, which I used to get the cloud density, has changed throughout the development of the homework. At first, I used a simple Perlin noise. Then, I added Worley noise in order to make clouds more <em>grouped</em>. At the last, I used some turbulance for the Perlin part. Now, it looks like this (I tried to take the power of the Worley in development but it looks like I forgot to remove it before submitting and in the submission it is taking its first power, same goes to 1/x'ing the noise outside the max and min heights, it just returns zero but I forgot the 1/x calculation):</p>
+            <pre>float noise(vec3 v) {
+    float p = 0.0f;
+    float w = worley(v);
+    for(int i = TURBULANCE_COUNT-1; i > 0; i--) {
+        p += perlin(v * float(1 << i));
+        p /= 2.0f;
+    }
+    float ret = p*(1.0f - w);
+    if(v.y >= MAX_CLOUD_Y+1.0f) {
+        //ret *= 1.0f/(v.y-MAX_CLOUD_Y);
+        ret = 0.0f;
+    } else if(v.y <= MIN_CLOUD_Y-1.0f) {
+        //ret *= 1.0f/(MIN_CLOUD_Y-v.y);
+        ret = 0.0f;
+    }
+    if(ret <= 0.025f) {
+        ret = 0.0f;
+    }
+    return ret;
+}</pre>
+            <p>As Worley gives higher values in the edges of the groups, I inverted by substracting it from 1.</p>
+            <p>Ever since we learnt the volumetric cloud rendering in the lectures, I have always wanted to do a night sky render with clouds, which is what my homework currently is. I couldn't have found a nice and clean night sky with stars and moon. So, I thought that, why shouldn't I use Minecraft? Minecraft night skies have always been pretty amazing, even without any fancy shaders, so I thought that it will be the best solution.</p>
+            <p>Creating the cubemap images in Minecraft was easier than I expected, since the teleportation command supports giving the facing angles, in degrees. The F3 menu helped me to see which command corresponds to which cubemap side. Note that I resized the window to 1024x1024 in the launcher settings so that the cubemap images are in that size. The tildes in the commands make the teleportation relative to the current position. As I am flying pretty high in the sky, there should be no difference, but if there was some terrain, it would matter to remain in the same position for all of the cubemap sides. Note that the Y textures probably need some fix to make them proper, but those stars look good without any issue in any orientation, so I did not change them. A more crowded scene will probably be better to do this fix.</p>
+
+            <video width="100%" controls="controls"><source src="./mc.mp4" type="video/mp4"/></video>
+            <figcaption>Video 1: Getting Cubemap from Minecraft (Nice splash text with stars :D)</figcaption>
+
+            <video width="100%" controls="controls"><source src="./cubemap.mp4" type="video/mp4"/></video>
+            <figcaption>Video 2: The Cubemap in the Homework Program</figcaption>
+
+            <p>I used the same method to record the keys, by pushing them to a set. You can find more details in the previous homework's post and in the code.</p>
+            <p>As C/C++ booleans are just fancy integers with only two possible values, 0 and 1, I used this to reduce the amount of branches. I don't know the performance implication, but it made the code much cleaner in my opinion.</p>
+
+            <pre>const auto q = key == GLFW_KEY_Q;
+const auto e = key == GLFW_KEY_E;
+const auto u = key == GLFW_KEY_U;
+const auto j = key == GLFW_KEY_J;
+const auto a = key == GLFW_KEY_A;
+const auto d = key == GLFW_KEY_D;
+const auto right_vec = glm::cross(camera.direction, camera.up);
+const auto rotation_quat =
+    glm::angleAxis(u*ROTATION_ANGLE - j*ROTATION_ANGLE, right_vec)
+    * glm::angleAxis(q*ROTATION_ANGLE - e*ROTATION_ANGLE, camera.up)
+    * glm::angleAxis(d*ROTATION_ANGLE - a*ROTATION_ANGLE, camera.direction);
+camera.direction = glm::vec3(rotation_quat * glm::vec4(camera.direction, 0.0f));
+camera.up = glm::vec3(rotation_quat * glm::vec4(camera.up, 0.0f));
+quad.get_model() = glm::toMat4(rotation_quat) * quad.get_model();
+
+const auto w = key == GLFW_KEY_W;
+const auto s = key == GLFW_KEY_S;
+
+camera_speed += (w-s) * CAMERA_ACCEL;</pre>
+            <p>It looks like the quaternion created by <code>glm::angleAxis</code> is normalized, since the rotations are done correctly. You can see the result in the previous video.</p>
+            <p>Currently, there are 2 levels of turbulance, 4 steps of normal ray marching and 3 steps of scattering steps. This gives reasonable performance both in my machine and the ineks. When the clouds are rendered, the FPS is around 70 (I use a 170Hz screen, so my maximum is 170, my other screen with 60Hz clamps at 60 FPS in both cases). When not, FPS goes to the maximum, about 170 in my case.</p>
+
+            <video width="100%" controls="controls"><source src="./clouds.mp4" type="video/mp4"/></video>
+            <figcaption>Video 3: Cloud Rendering</figcaption>
+
+            <p>Decreasing the turbulance count by 1 (so that there is no turbulance) makes the FPS around 90.</p>
+
+            <video width="100%" controls="controls"><source src="./less-turbulance.mp4" type="video/mp4"/></video>
+            <figcaption>Video 4: Less Turbulance</figcaption>
+
+            <p>Increasing it by 1 on the other hand decreases the FPS to around 50, which now can be felt in my 60Hz screen.</p>
+
+            <video width="100%" controls="controls"><source src="./more-turbulance.mp4" type="video/mp4"/></video>
+            <figcaption>Video 5: More Turbulance</figcaption>
+
+            <p>Increasing this further decreases the FPS to around 38, which is pretty bad right now. However, the visuals are even better now.</p>
+
+            <video width="100%" controls="controls"><source src="./even-more-turbulance.mp4" type="video/mp4"/></video>
+            <figcaption>Video 6: Even More Turbulance</figcaption>
+
+            <p>It seems like my Worley noise implementation just returns some values bigger than 1 (I did not test it independently in development). When I remove it, the clouds become a bit lighter and the distribution does not change at all.</p>
+            <p>Without scattering, I get 60 FPS in 4 (even more one) level of turbulance, and the very, very weak blue lighting does not exist anymore.</p>
+
+            <video width="100%" controls="controls"><source src="./no-scattering-turbulance.mp4" type="video/mp4"/></video>
+            <figcaption>Video 7: Even More Turbulance without Scattering</figcaption>
+
+            <p>And, here comes the end of this blog post! I hope that it was helpful.</p>
+            <hr/>
+            <footer>Erencan CEYHAN<br/>
+                Date: 2023/06/03 - 14:48<br/>
+                METUID: 2521342
+            </footer>
+        </div>
+    </body>
+</html>

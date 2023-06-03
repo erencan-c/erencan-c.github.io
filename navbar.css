@@ -11,12 +11,12 @@
 
 @media only screen and (orientation: landscape) {
     :root {
-        --responsive-font-size: 1vw;
+        --responsive-font-size: 1.2vw;
     }
 }
 
 body {
-    font-family: monospace !important;
+    font-family: serif !important;
     font-size: var(--responsive-font-size) !important;
     background-color: #c0c0c0;
 }
@@ -32,6 +32,6 @@ nav {
 }
 
 button {
-    font-family: monospace !important;
+    font-family: serif !important;
     font-size: var(--responsive-font-size) !important;
 }
