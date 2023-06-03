@@ -94,7 +94,7 @@ vec4 raymarch(vec3 position, vec3 direction) {
 }</pre>
             <p>As Worley gives higher values in the edges of the groups, I inverted by substracting it from 1.</p>
             <p>Ever since we learnt the volumetric cloud rendering in the lectures, I have always wanted to do a night sky render with clouds, which is what my homework currently is. I couldn't have found a nice and clean night sky with stars and moon. So, I thought that, why shouldn't I use Minecraft? Minecraft night skies have always been pretty amazing, even without any fancy shaders, so I thought that it will be the best solution.</p>
-            <p>Creating the cubemap images in Minecraft was easier than I expected, since the teleportation command supports giving the facing angles, in degrees. The F3 menu helped me to see which command corresponds to which cubemap side. Note that I resized the window to 1024x1024 in the launcher settings so that the cubemap images are in that size. The tildes in the commands make the teleportation relative to the current position. As I am flying pretty high in the sky, there should be no difference, but if there was some terrain, it would matter to remain in the same position for all of the cubemap sides. Note that the Y textures probably need some fix to make them proper, but those stars look good without any issue in any orientation, so I did not change them. A more crowded scene will probably be better to do this fix.</p>
+            <p>Creating the cubemap images in Minecraft was easier than I expected, since the teleportation command supports giving the facing angles, in degrees. The F3 menu helped me to see which command corresponds to which cubemap side. Note that I resized the window to 1024x1024 in the launcher settings so that the cubemap images are in that size. The tildes in the commands make the teleportation relative to the current position. As I am flying pretty high in the sky, there should be no difference, but if there was some terrain, it would matter to remain in the same position for all of the cubemap sides. Note that the Y textures probably need some fix to make them proper, but those stars look good without any issue in any orientation, so I did not change them. A more crowded scene will probably be better to do this fix. Also note that the FOV should be 90 for the images to really be the sides of the cubes. It can be set in the settings.</p>
 
             <video width="100%" controls="controls"><source src="./mc.mp4" type="video/mp4"/></video>
             <figcaption>Video 1: Getting Cubemap from Minecraft (Nice splash text with stars :D)</figcaption>
@@ -154,7 +154,7 @@ camera_speed += (w-s) * CAMERA_ACCEL;</pre>
             <p>And, here comes the end of this blog post! I hope that it was helpful.</p>
             <hr/>
             <footer>Erencan CEYHAN<br/>
-                Date: 2023/06/03 - 14:48<br/>
+                Date: 2023/06/03 - 14:54<br/>
                 METUID: 2521342
             </footer>
         </div>
