@@ -298,7 +298,7 @@ void trace() {
 		case REFLECT:
 			CUR.recurse_place = REFRACT;
 			NEXT.recurse_place = START;
-			NEXT.ray_start = CUR.hit_point - 2.0f*CUR.normal*SHADOW_RAY_EPSILON;
+			NEXT.ray_start = CUR.hit_point + 2.0f*CUR.refracted_ray_direction*SHADOW_RAY_EPSILON;
 			NEXT.ray_direction = CUR.refracted_ray_direction;
 			NEXT.amount = CUR.amount * material_refract_ratios[CUR.material];
 			NEXT.eta = material_refract[CUR.material];

@@ -22,6 +22,12 @@ let scene;
 const fps_counter = document.querySelector('#fps-counter');
 const scene_file_picker = document.querySelector('#scene-file');
 const transparency = document.querySelector('#transparency');
+const eta = document.querySelector('#eta');
+const transparencyValue = document.querySelector('#transparency-value');
+const etaValue = document.querySelector('#eta-value');
+const startStop = document.querySelector('#start-stop');
+const transparencyContainer = document.querySelector('#transparency-container');
+const etaContainer = document.querySelector('#eta-container');
 let fileChanged = false;
 //console.log(_scene_data_string);
 function init() {
@@ -52,6 +58,8 @@ const keys = {
     e: false,
     r: false,
     f: false,
+    Shift: false,
+    ' ': false,
 };
 const SPEED = 0.01;
 const ROTATION = 0.04;
@@ -67,6 +75,7 @@ function draw(now) {
     let rightVector = cross(scene.camera.gaze, scene.camera.up);
     scene.camera.position = translate(scene.camera.position, scaleVector(scene.camera.gaze, SPEED * dt * (Number(keys.w) - Number(keys.s))));
     scene.camera.position = translate(scene.camera.position, scaleVector(rightVector, SPEED * dt * (Number(keys.d) - Number(keys.a))));
+    scene.camera.position = translate(scene.camera.position, scaleVector(scene.camera.up, SPEED * dt * (Number(keys[' ']) - Number(keys.Shift))));
     scene.camera.gaze = applyTransformation(angleAxis(scene.camera.up, ROTATION * (Number(keys.q) - Number(keys.e))), scene.camera.gaze);
     scene.camera.gaze = applyTransformation(angleAxis(rightVector, ROTATION * (Number(keys.r) - Number(keys.f))), scene.camera.gaze);
     scene.camera.up = applyTransformation(angleAxis(rightVector, ROTATION * (Number(keys.r) - Number(keys.f))), scene.camera.up);
@@ -81,13 +90,25 @@ async function getFile(path) {
 document.addEventListener('keydown', event => {
     if (event.key == 'g') {
         running = !running;
+        startStop.innerHTML = running ? "Running" : "Stopped";
         if (running) {
             requestAnimationFrame(draw);
+            startStop.style.color = '#007F00';
         }
+        else {
+            startStop.style.color = '#7F0000';
+        }
+    }
+    console.log(event.key);
+    if (event.key === ' ' || event.key === 'Shift') {
+        event.preventDefault();
     }
     keys[event.key] = true;
 });
 document.addEventListener('keyup', event => {
+    if (event.key === ' ' || event.key === 'Shift') {
+        event.preventDefault();
+    }
     keys[event.key] = false;
 });
 transparency.onchange = event => {
@@ -95,6 +116,11 @@ transparency.onchange = event => {
     scene.materials.refractRatio[9] = parseFloat(transparency.value) / 100;
     scene.materials.refractRatio[10] = scene.materials.refractRatio[9];
     scene.materials.refractRatio[11] = scene.materials.refractRatio[9];
+    transparencyValue.innerHTML = scene.materials.refractRatio[9].toString();
+};
+eta.onchange = event => {
+    scene.materials.refract[3] = (parseFloat(eta.value) + 1.0) / 25.0;
+    etaValue.innerHTML = scene.materials.refract[3].toString();
 };
 scene_file_picker.onchange = event => {
     //@ts-ignore
@@ -109,6 +135,9 @@ scene_file_picker.onchange = event => {
         shader = new ShaderProgram(gl, _vertexShader, _fragmentShader, scene);
         fileChanged = true;
         transparency.disabled = true;
+        transparencyContainer.hidden = true;
+        eta.disabled = true;
+        etaContainer.hidden = true;
         console.log(scene);
     };
 };

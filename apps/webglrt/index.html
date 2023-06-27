@@ -12,13 +12,22 @@
 			<label style="display: inline;">FPS:</label>
 			<input style="display: inline;" id="fps-counter" disabled="disabled" type="text" name="FPS" value="0"/>
 		</div>
-        <div>
-            <label>Transparency of the sphere:</label>
+        <div id="transparency-container">
+            <label>Transparency of the sphere: </label>
             <input type="range" id="transparency" value="0"/>
+            <label id="transparency-value">0</label>
+        </div>
+        <div id="eta-container">
+            <label>Eta of the sphere: </label>
+            <input type="range" id="eta"/>
+            <label id="eta-value">1</label>
         </div>
         <div>
             <label>Scene File:</label>
             <input id="scene-file" type="file" />
+        </div>
+        <div>
+            <p style="color: #7F0000;" id="start-stop">Stopped</p>
         </div>
         <hr/>
         <div>
@@ -28,6 +37,8 @@
                 A: Left<br/>
                 S: Backward<br/>
                 D: Right<br/>
+                Space: Go Up<br/>
+                Shift: Go Down<br/>
                 G: Start/Stop<br/>
                 Q: Rotate Left<br/>
                 E: Rotate Right<br/>

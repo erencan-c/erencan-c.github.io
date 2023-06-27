@@ -96,7 +96,7 @@
             <DiffuseReflectance>0.05 0.05 0.05</DiffuseReflectance>
             <SpecularReflectance>0.1 0.1 0.1</SpecularReflectance>
             <MirrorReflectance>0 0 0</MirrorReflectance>
-            <Refractance>1.0</Refractance>
+            <Refractance>0.4</Refractance>
             <RefractanceRatio>0 0 0</RefractanceRatio>
             <PhongExponent>1</PhongExponent>
         </Material>
