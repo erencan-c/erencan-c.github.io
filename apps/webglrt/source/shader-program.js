@@ -39,8 +39,8 @@ class ShaderProgram {
     constructor(gl, vertexShader, fragmentShader = "") {
         const v = ShaderProgram.createShader(gl, vertexShader, gl.VERTEX_SHADER);
         const f = ShaderProgram.createShader(gl, fragmentShader, gl.FRAGMENT_SHADER);
-        //console.log(vertexShader);
-        //console.log(fragmentShader);
+        console.log(vertexShader);
+        console.log(fragmentShader);
         this.program = gl.createProgram();
         gl.attachShader(this.program, v);
         gl.attachShader(this.program, f);
