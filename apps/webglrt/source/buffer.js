@@ -2,6 +2,7 @@ export { Buffer };
 function log_gl(gl, context = "") {
     let gl_error = gl.getError();
     if (gl_error !== 0) {
+        alert(`Error in ${context}: ${gl_error}`);
         throw new Error(`Error in ${context}: ${gl_error}`);
     }
 }
@@ -14,7 +15,6 @@ class Buffer {
         gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
         this.array = gl.createVertexArray();
         gl.bindVertexArray(this.array);
-        console.log(positions);
         gl.enableVertexAttribArray(shader.getAttribLocation(gl, 'world_position'));
         gl.vertexAttribPointer(shader.getAttribLocation(gl, 'world_position'), 2, gl.FLOAT, false, 0, 0);
     }

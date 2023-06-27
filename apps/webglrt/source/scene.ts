@@ -6,8 +6,8 @@ class Camera {
     position: Float32Array;
     gaze: Float32Array;
     up: Float32Array;
-    near_plane: Float32Array;
-    near_distance: number;
+    nearPlane: Float32Array;
+    nearDistance: number;
 }
 
 class Material {
@@ -16,38 +16,38 @@ class Material {
     specular: Float32Array;
     reflect: Float32Array;
     refract: Float32Array;
-    refract_ratio: Float32Array;
+    refractRatio: Float32Array;
     phong: Float32Array;
 }
 
 class Scene {
-    background_color: Float32Array;
-    shadow_ray_epsilon: number;
-    max_recursion_depth: number;
+    backgroundColor: Float32Array;
+    shadowRayEpsilon: number;
+    maxRecursionDepth: number;
     camera: Camera;
     ambient_light: Float32Array;
-    light_positions: Float32Array;
-    light_intensities: Float32Array;
+    lightPositions: Float32Array;
+    lightIntensities: Float32Array;
     materials: Material;
-    vertices: Float32Array;
-    material_ids: Int32Array;
-    sphere_materials: Int32Array;
-    sphere_centers: Float32Array;
-    sphere_radii: Float32Array;
-
+    vertexData: Float32Array;
+    vertices: Int32Array;
+    materialIds: Int32Array;
+    sphereMaterials: Int32Array;
+    sphereCenters: Int32Array;
+    sphereRadii: Float32Array;
 
     constructor(gl: WebGL2RenderingContext, xml_object: XMLDocument) {
-        this.background_color = new Float32Array(xml_object.querySelector('BackgroundColor').innerHTML.trim().split(/\s+/).map(parseFloat));
-        this.shadow_ray_epsilon = parseFloat(xml_object.querySelector('ShadowRayEpsilon').innerHTML.trim());
-        this.max_recursion_depth = parseFloat(xml_object.querySelector('MaxRecursionDepth').innerHTML.trim());
+        this.backgroundColor = new Float32Array(xml_object.querySelector('BackgroundColor').innerHTML.trim().split(/\s+/).map(parseFloat));
+        this.shadowRayEpsilon = parseFloat(xml_object.querySelector('ShadowRayEpsilon').innerHTML.trim());
+        this.maxRecursionDepth = parseFloat(xml_object.querySelector('MaxRecursionDepth').innerHTML.trim());
         
         let cam = xml_object.querySelector('Camera');
         this.camera = {
             'position': new Float32Array(cam.querySelector('Position').innerHTML.trim().split(/\s+/).map(parseFloat)),
             'gaze': new Float32Array(cam.querySelector('Gaze').innerHTML.trim().split(/\s+/).map(parseFloat)),
             'up': new Float32Array(cam.querySelector('Up').innerHTML.trim().split(/\s+/).map(parseFloat)),
-            'near_plane': new Float32Array(cam.querySelector('NearPlane').innerHTML.trim().split(/\s+/).map(parseFloat)),
-            'near_distance': parseFloat(cam.querySelector('NearDistance').innerHTML.trim()),
+            'nearPlane': new Float32Array(cam.querySelector('NearPlane').innerHTML.trim().split(/\s+/).map(parseFloat)),
+            'nearDistance': parseFloat(cam.querySelector('NearDistance').innerHTML.trim()),
         }
         
         let lights = xml_object.querySelector('Lights');
@@ -64,8 +64,8 @@ class Scene {
             light_intensities.push(inten[1]);
             light_intensities.push(inten[2]);
         });
-        this.light_positions = new Float32Array(light_positions);
-        this.light_intensities = new Float32Array(light_intensities);
+        this.lightPositions = new Float32Array(light_positions);
+        this.lightIntensities = new Float32Array(light_intensities);
         
         let materials = xml_object.querySelector('Materials');
         let ambient_reflectances = [];
@@ -80,8 +80,9 @@ class Scene {
             let diffuse = material.querySelector('DiffuseReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
             let specular = material.querySelector('SpecularReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
             let reflect = material.querySelector('MirrorReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
-            let refract = parseFloat(material.querySelector('Refractance').innerHTML.trim());
-            let refract_ratio = material.querySelector('RefractanceRatio').innerHTML.trim().split(/\s+/).map(parseFloat);
+            let hasRefract = material.querySelector('Refractance') !== null;
+            let refract = hasRefract ? parseFloat(material.querySelector('Refractance').innerHTML.trim()) : 1.0;
+            let refract_ratio = hasRefract ? material.querySelector('RefractanceRatio').innerHTML.trim().split(/\s+/).map(parseFloat) : [0,0,0];
             let phong = parseFloat(material.querySelector('PhongExponent').innerHTML.trim());
             
             ambient_reflectances.push(ambient[0]);
@@ -108,57 +109,57 @@ class Scene {
             'specular': new Float32Array(specular_reflectances),
             'reflect': new Float32Array(reflectances),
             'refract': new Float32Array(refractances),
-            'refract_ratio': new Float32Array(refractance_ratios),
+            'refractRatio': new Float32Array(refractance_ratios),
             'phong': new Float32Array(phong_exponents)
         };
         
-        this.vertices = new Float32Array (xml_object.querySelector('VertexData').innerHTML.trim().split(/\s+/).map(parseFloat));
-        
-        let material_ids = [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            2,
-            2
-        ];
-        let vertex_ids = [
-            1, 2, 6,
-            6, 5, 1,
-            5, 6, 7,
-            7, 8, 5,
-            7, 3, 4,
-            4, 8, 7,
-            8, 4, 1,
-            8, 1, 5,
-            2, 3, 7,
-            2, 7, 6
-        ];
-        
-        let vertices = [];
-        vertex_ids.forEach(id => {
-            vertices.push(this.vertices[3*(id-1)]);
-            vertices.push(this.vertices[3*(id-1) + 1]);
-            vertices.push(this.vertices[3*(id-1) + 2]);
+        this.vertexData = new Float32Array (xml_object.querySelector('VertexData').innerHTML.trim().split(/\s+/).map(parseFloat));
+
+        let m_id: number[] = [];
+        let v_id: number[] = [];
+
+        let objects = xml_object.querySelector('Objects');
+        objects.querySelectorAll('Mesh').forEach(mesh => {
+            let material_id = parseFloat(mesh.querySelector('Material').innerHTML) - 1;
+            let vertex_ids = mesh.querySelector('Faces').innerHTML.trim().split(/\s+/).map(v => parseFloat(v) - 1);
+            for(let i = 0; i < vertex_ids.length/3; i++) {
+                m_id.push(material_id);
+            }
+            for(let i = 0; i < vertex_ids.length; i++) {
+                v_id.push(vertex_ids[i]);
+            }
         });
         
-        this.vertices = new Float32Array(vertices);
-        this.material_ids = new Int32Array(material_ids);
+        this.materialIds = new Int32Array(m_id);
+        this.vertices = new Int32Array(v_id);
+
+        let s_m: number[] = [];
+        let s_c: number[] = [];
+        let s_r: number[] = [];
+
+        objects.querySelectorAll('Sphere').forEach(sphere => {
+            let material_id = parseFloat(sphere.querySelector('Material').innerHTML) - 1;
+            let center_id = parseFloat(sphere.querySelector('Center').innerHTML) - 1;
+            let radius = parseFloat(sphere.querySelector('Radius').innerHTML);
+
+            s_m.push(material_id);
+            s_c.push(center_id);
+            s_r.push(radius);
+        });
+
+        console.log(this.vertices);
+        console.log(s_m);
+        console.log(s_c);
+        console.log(s_r);
         
-        let sphere_materials = [3,4];
-        let sphere_centers = [5,-6,-1, -5,-6,-5];
-        let sphere_radii = [4,4];
-        
-        this.sphere_materials = new Int32Array(sphere_materials);
-        this.sphere_centers = new Float32Array(sphere_centers);
-        this.sphere_radii = new Float32Array(sphere_radii);
+        this.sphereMaterials = new Int32Array(s_m);
+        this.sphereCenters = new Int32Array(s_c);
+        this.sphereRadii = new Float32Array(s_r);
+
+        console.log(this);
     }
 
-    send_scene(gl: WebGL2RenderingContext, shader: ShaderProgram) {
+    sendScene(gl: WebGL2RenderingContext, shader: ShaderProgram) {
         gl.uniform3f(shader.getUniformLocation(gl, 'ambient_light'),
             this.ambient_light[0],
             this.ambient_light[1],
@@ -166,9 +167,9 @@ class Scene {
         );
         
         gl.uniform3f(shader.getUniformLocation(gl, 'background_color'),
-            this.background_color[0],
-            this.background_color[1],
-            this.background_color[2]
+            this.backgroundColor[0],
+            this.backgroundColor[1],
+            this.backgroundColor[2]
         );
         
         gl.uniform3f(shader.getUniformLocation(gl, 'camera.gaze'),
@@ -178,14 +179,14 @@ class Scene {
         );
         
         gl.uniform1f(shader.getUniformLocation(gl, 'camera.near_distance'),
-            this.camera.near_distance
+            this.camera.nearDistance
         );
         
         gl.uniform4f(shader.getUniformLocation(gl, 'camera.near_plane'),
-            this.camera.near_plane[0],
-            this.camera.near_plane[1],
-            this.camera.near_plane[2],
-            this.camera.near_plane[3]
+            this.camera.nearPlane[0],
+            this.camera.nearPlane[1],
+            this.camera.nearPlane[2],
+            this.camera.nearPlane[3]
         );
         
         gl.uniform3f(shader.getUniformLocation(gl, 'camera.position'),
@@ -200,23 +201,23 @@ class Scene {
             this.camera.up[2]
         );
         
-        gl.uniform3fv(shader.getUniformLocation(gl, 'light_intensities'), this.light_intensities);
-        gl.uniform3fv(shader.getUniformLocation(gl, 'light_positions'), this.light_positions);
+        gl.uniform3fv(shader.getUniformLocation(gl, 'light_intensities'), this.lightIntensities);
+        gl.uniform3fv(shader.getUniformLocation(gl, 'light_positions'), this.lightPositions);
         
         gl.uniform3fv(shader.getUniformLocation(gl, 'material_ambient'), this.materials.ambient);
         gl.uniform3fv(shader.getUniformLocation(gl, 'material_diffuse'), this.materials.diffuse);
         gl.uniform1fv(shader.getUniformLocation(gl, 'material_phong'), this.materials.phong);
         gl.uniform3fv(shader.getUniformLocation(gl, 'material_reflect'), this.materials.reflect);
         gl.uniform1fv(shader.getUniformLocation(gl, 'material_refract'), this.materials.refract);
-        gl.uniform3fv(shader.getUniformLocation(gl, 'material_refract_ratios'), this.materials.refract_ratio);
+        gl.uniform3fv(shader.getUniformLocation(gl, 'material_refract_ratios'), this.materials.refractRatio);
         gl.uniform3fv(shader.getUniformLocation(gl, 'material_specular'), this.materials.specular);
         
-        gl.uniform3fv(shader.getUniformLocation(gl, 'vertices'), this.vertices);
+        gl.uniform3fv(shader.getUniformLocation(gl, 'vertex_data'), this.vertexData);
+        gl.uniform1iv(shader.getUniformLocation(gl, 'vertices'), this.vertices);
+        gl.uniform1iv(shader.getUniformLocation(gl, 'material_ids'), this.materialIds);
         
-        gl.uniform1iv(shader.getUniformLocation(gl, 'material_ids'), this.material_ids);
-        
-        gl.uniform1iv(shader.getUniformLocation(gl, 'sphere_materials'), this.sphere_materials);
-        gl.uniform3fv(shader.getUniformLocation(gl, 'sphere_centers'), this.sphere_centers);
-        gl.uniform1fv(shader.getUniformLocation(gl, 'sphere_radii'), this.sphere_radii);
+        gl.uniform1iv(shader.getUniformLocation(gl, 'sphere_materials'), this.sphereMaterials);
+        gl.uniform1iv(shader.getUniformLocation(gl, 'sphere_centers'), this.sphereCenters);
+        gl.uniform1fv(shader.getUniformLocation(gl, 'sphere_radii'), this.sphereRadii);
     }
 }

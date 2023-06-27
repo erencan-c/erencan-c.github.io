@@ -51,8 +51,8 @@
             <DiffuseReflectance>0.08 0.08 0.08</DiffuseReflectance>
             <SpecularReflectance>0 0 0</SpecularReflectance>
             <MirrorReflectance>0 0 0</MirrorReflectance>
-            <Refractance>1.0</Refractance>
-            <RefractanceRatio>0 0 0</RefractanceRatio>
+			<Refractance>0</Refractance>
+			<RefractanceRatio>0 0 0</RefractanceRatio>
             <PhongExponent>1</PhongExponent>
         </Material>
         <Material id="2">
@@ -60,8 +60,8 @@
             <DiffuseReflectance>0.1 0 0</DiffuseReflectance>
             <SpecularReflectance>0 0 0</SpecularReflectance>
             <MirrorReflectance>0 0 0</MirrorReflectance>
-            <Refractance>1.0</Refractance>
-            <RefractanceRatio>0 0 0</RefractanceRatio>
+			<Refractance>0</Refractance>
+			<RefractanceRatio>0 0 0</RefractanceRatio>
             <PhongExponent>1</PhongExponent>
         </Material>
         <Material id="3">
@@ -69,8 +69,8 @@
             <DiffuseReflectance>0 0 0.1</DiffuseReflectance>
             <SpecularReflectance>0 0 0</SpecularReflectance>
             <MirrorReflectance>0 0 0</MirrorReflectance>
-            <Refractance>1.0</Refractance>
-            <RefractanceRatio>0 0 0</RefractanceRatio>
+			<Refractance>0</Refractance>
+			<RefractanceRatio>0 0 0</RefractanceRatio>
             <PhongExponent>1</PhongExponent>
         </Material>
         <Material id="4">
@@ -78,26 +78,26 @@
             <DiffuseReflectance>0.08 0.08 0.08</DiffuseReflectance>
             <SpecularReflectance>0 0 0</SpecularReflectance>
             <MirrorReflectance>0 0 0</MirrorReflectance>
-            <Refractance>1.0</Refractance>
-            <RefractanceRatio>0 0 0</RefractanceRatio>
+			<Refractance>0</Refractance>
+			<RefractanceRatio>0 0 0</RefractanceRatio>
             <PhongExponent>1</PhongExponent>
         </Material>
         <Material id="5" type="mirror">
             <AmbientReflectance>1 1 1</AmbientReflectance>
             <DiffuseReflectance>0 0 0</DiffuseReflectance>
             <SpecularReflectance>0 0 0</SpecularReflectance>
-            <MirrorReflectance>0.9 0.9 0.9</MirrorReflectance>
-            <Refractance>1.0</Refractance>
-            <RefractanceRatio>0.6 0.6 0.6</RefractanceRatio>
-            <PhongExponent>1</PhongExponent>
+            <MirrorReflectance>0.2 0.2 0.2</MirrorReflectance>
+			<Refractance>1.0</Refractance>
+			<RefractanceRatio>0.6 0.6 0.6</RefractanceRatio>
+            <PhongExponent>10</PhongExponent>
         </Material>
         <Material id="6">
             <AmbientReflectance>1 1 1</AmbientReflectance>
             <DiffuseReflectance>0.05 0.05 0.05</DiffuseReflectance>
             <SpecularReflectance>0.1 0.1 0.1</SpecularReflectance>
             <MirrorReflectance>0 0 0</MirrorReflectance>
-            <Refractance>1.0</Refractance>
-            <RefractanceRatio>0 0 0</RefractanceRatio>
+			<Refractance>1.0</Refractance>
+			<RefractanceRatio>0 0 0</RefractanceRatio>
             <PhongExponent>1</PhongExponent>
         </Material>
     </Materials>

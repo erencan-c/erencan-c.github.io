@@ -1,15 +1,25 @@
 #version 300 es
 precision highp float;
 
-#define LIGHT_COUNT 1
-#define MATERIAL_COUNT 6
-#define VERTEX_COUNT 30
-#define SPHERE_COUNT 2
-#define MAX_RECURSION_DEPTH 3
-#define SHADOW_RAY_EPSILON 1e-3
+// #define LIGHT_COUNT 1
+// #define MATERIAL_COUNT 6
+// #define VERTEX_COUNT 30
+// #define SPHERE_COUNT 2
+// #define MAX_RECURSION_DEPTH 3
+// #define SHADOW_RAY_EPSILON 1e-4
 #define TRIANGLE_EPSILON 1e-6
 #define DEBUG_COLOR vec4(1.0f, 0.0f, 1.0f, 1.0f)
 #define CAST(start, direction, t) ((start) + (direction)*(t))
+
+#define LIGHT_COUNT $LIGHT_COUNT
+#define MATERIAL_COUNT $MATERIAL_COUNT
+#define VERTEX_COUNT $VERTEX_COUNT
+#define FACE_VERTEX_COUNT $FACE_VERTEX_COUNT
+#define SPHERE_COUNT $SPHERE_COUNT
+#define MAX_RECURSION_DEPTH $MAX_RECURSION_DEPTH
+#define SHADOW_RAY_EPSILON $SHADOW_RAY_EPSILON
+#define HAS_TRIANGLE $HAS_TRIANGLE
+#define HAS_SPHERE $HAS_SPHERE
 
 in vec4 vertex_position;
 out vec4 color;
@@ -37,15 +47,16 @@ uniform float material_refract[MATERIAL_COUNT];
 uniform vec3 material_refract_ratios[MATERIAL_COUNT];
 uniform vec3 material_specular[MATERIAL_COUNT];
 
-uniform vec3 vertices[VERTEX_COUNT];
-uniform int material_ids[VERTEX_COUNT/3];
+uniform vec3 vertex_data[VERTEX_COUNT];
+uniform int vertices[FACE_VERTEX_COUNT];
+uniform int material_ids[FACE_VERTEX_COUNT/3];
 
 uniform int sphere_materials[SPHERE_COUNT];
-uniform vec3 sphere_centers[SPHERE_COUNT];
+uniform int sphere_centers[SPHERE_COUNT];
 uniform float sphere_radii[SPHERE_COUNT];
 
 bool sphere_get_collision(int sphere_index, vec3 ray_start, vec3 ray_direction, out float t_out) {
-	vec3 C = sphere_centers[sphere_index];
+	vec3 C = vertex_data[sphere_centers[sphere_index]];
 	float r = sphere_radii[sphere_index];
 	vec3 o = ray_start;
 	vec3 u = ray_direction;
@@ -66,15 +77,15 @@ bool sphere_get_collision(int sphere_index, vec3 ray_start, vec3 ray_direction, 
 }
 
 vec3 sphere_get_normal(int sphere_index, vec3 point) {
-	return (point - sphere_centers[sphere_index]) / sphere_radii[sphere_index];
+	return (point - vertex_data[sphere_centers[sphere_index]]) / sphere_radii[sphere_index];
 }
 
 bool triangle_get_collision(int face_id, vec3 ray_start, vec3 ray_direction, out float t_out) {
 	t_out = 0.0f;
 
-	vec3 vertex0 = vertices[3*face_id];
-	vec3 vertex1 = vertices[3*face_id + 1];
-	vec3 vertex2 = vertices[3*face_id + 2];
+	vec3 vertex0 = vertex_data[vertices[3*face_id]];
+	vec3 vertex1 = vertex_data[vertices[3*face_id + 1]];
+	vec3 vertex2 = vertex_data[vertices[3*face_id + 2]];
 	
 	vec3 edge1 = vertex1 - vertex0;
 	vec3 edge2 = vertex2 - vertex0;
@@ -112,31 +123,35 @@ bool get_collision(vec3 ray_start, vec3 ray_direction, out float t_out, out int 
 	id_out = 0;
 	normal = vec3(0.0f, 0.0f, 0.0f);
 	bool found = false;
-	for(int i = 0; i < SPHERE_COUNT; i++) {
-		float t_tmp = 0.0f;
-		bool does_intersect = sphere_get_collision(i, ray_start, ray_direction, t_tmp);
-		if(does_intersect && t_tmp > 0.0f && (t_tmp < t || t < 0.0f)) {
-			is_sphere = true;
-			t = t_tmp;
-			id_out = i;
-			normal = sphere_get_normal(i, ray_start + t*ray_direction);
-			found = true;
+	#if HAS_SPHERE
+		for(int i = 0; i < SPHERE_COUNT; i++) {
+			float t_tmp = 0.0f;
+			bool does_intersect = sphere_get_collision(i, ray_start, ray_direction, t_tmp);
+			if(does_intersect && t_tmp > 0.0f && (t_tmp < t || t < 0.0f)) {
+				is_sphere = true;
+				t = t_tmp;
+				id_out = i;
+				normal = sphere_get_normal(i, ray_start + t*ray_direction);
+				found = true;
+			}
 		}
-	}
-	for(int i = 0; i < VERTEX_COUNT/3; i++) {
-		float t_tmp = 0.0f;
-		bool does_intersect = triangle_get_collision(i, ray_start, ray_direction, t_tmp);
-		if(does_intersect && t_tmp > 0.0f && (t_tmp < t || t < 0.0f)) {
-			is_sphere = false;
-			t = t_tmp;
-			id_out = i;
-			vec3 vertex0 = vertices[3*i];
-			vec3 vertex1 = vertices[3*i + 1];
-			vec3 vertex2 = vertices[3*i + 2];
-			normal = normalize(cross(vertex1-vertex0, vertex2-vertex0));
-			found = true;
+	#endif
+	#if HAS_TRIANGLE
+		for(int i = 0; i < FACE_VERTEX_COUNT/3; i++) {
+			float t_tmp = 0.0f;
+			bool does_intersect = triangle_get_collision(i, ray_start, ray_direction, t_tmp);
+			if(does_intersect && t_tmp > 0.0f && (t_tmp < t || t < 0.0f)) {
+				is_sphere = false;
+				t = t_tmp;
+				id_out = i;
+				vec3 vertex0 = vertex_data[vertices[3*i]];
+				vec3 vertex1 = vertex_data[vertices[3*i + 1]];
+				vec3 vertex2 = vertex_data[vertices[3*i + 2]];
+				normal = normalize(cross(vertex1-vertex0, vertex2-vertex0));
+				found = true;
+			}
 		}
-	}
+	#endif
 	if(found) {
 		t_out = t;
 		return true;
@@ -144,21 +159,26 @@ bool get_collision(vec3 ray_start, vec3 ray_direction, out float t_out, out int 
 	return false;
 }
 
-bool is_shadowed(vec3 ray_start, vec3 ray_direction) {
+vec3 is_shadowed(vec3 ray_start, vec3 ray_direction) {
 	float t = 0.0;
+	vec3 ret = vec3(1.0f, 1.0f, 1.0f);
+	#if HAS_SPHERE
 	for(int i = 0; i < SPHERE_COUNT; i++) {
 		bool does_intersect = sphere_get_collision(i, ray_start, ray_direction, t);
 		if(does_intersect && 0.0f < t && t < 1.0f) {
-			return true;
+			ret *= material_refract_ratios[sphere_materials[i]];
 		}
 	}
-	for(int i = 0; i < VERTEX_COUNT/3; i++) {
+	#endif
+	#if HAS_TRIANGLE
+	for(int i = 0; i < FACE_VERTEX_COUNT/3; i++) {
 		bool does_intersect = triangle_get_collision(i, ray_start, ray_direction, t);
 		if(does_intersect && 0.0f < t && t < 1.0f) {
-			return true;
+			ret *= material_refract_ratios[material_ids[i]];
 		}
 	}
-	return false;
+	#endif
+	return ret;
 }
 
 vec3 diffuse_shading(vec3 shadow_ray_start, vec3 shadow_ray_direction, vec3 lh, vec3 zor, vec3 norm, float r2, int material_id) {
@@ -180,15 +200,14 @@ vec3 specular_shading(	vec3 shadow_ray_start,
 
 void do_shading(vec3 hit_point, vec3 norm, int material_id, vec3 incoming_ray_start, vec3 incoming_ray_direction, inout vec3 diffuse, inout vec3 specular) {
 	for(int i = 0; i < LIGHT_COUNT; i++) {
-		vec3 shadow_ray_start = hit_point + norm*SHADOW_RAY_EPSILON;
+		vec3 shadow_ray_start = hit_point;
 		vec3 shadow_ray_direction = light_positions[i] - shadow_ray_start;
-		if(!is_shadowed(shadow_ray_start, shadow_ray_direction)) {
-			vec3 lh = shadow_ray_direction;
-			float r2 = dot(lh, lh);
-			vec3 zor = light_intensities[i]/r2;
-			diffuse += diffuse_shading(shadow_ray_start, shadow_ray_direction, lh, zor, norm, r2, material_id);
-			specular += specular_shading(shadow_ray_start, shadow_ray_direction, lh, zor, norm, r2, material_id, incoming_ray_start, incoming_ray_direction);
-		}
+		vec3 shadow_amount = is_shadowed(shadow_ray_start, shadow_ray_direction);
+		vec3 lh = shadow_ray_direction;
+		float r2 = dot(lh, lh);
+		vec3 zor = light_intensities[i]/r2;
+		diffuse += diffuse_shading(shadow_ray_start, shadow_ray_direction, lh, zor, norm, r2, material_id)*shadow_amount;
+		specular += specular_shading(shadow_ray_start, shadow_ray_direction, lh, zor, norm, r2, material_id, incoming_ray_start, incoming_ray_direction)*shadow_amount;
 	}
 }
 
@@ -197,11 +216,16 @@ void do_shading(vec3 hit_point, vec3 norm, int material_id, vec3 incoming_ray_st
 #define REFRACT 2
 
 struct CallStackEntry {
+	// Instruction "pointer"
 	int recurse_place;
+
+	// Arguments
 	vec3 ray_start;
 	vec3 ray_direction;
 	vec3 amount;
 	float eta;
+
+	// Local variables
 	int material;
 	vec3 hit_point;
 	vec3 normal;
@@ -239,29 +263,30 @@ void shade(vec3 ray_start, vec3 ray_direction, int material, vec3 hit_point, vec
 #define NEXT (call_stack[call_stack_position])
 
 void trace() {
-	while(true) {
+	for(int i = 0; i < (1 << (MAX_RECURSION_DEPTH+3)); i++) {
 		if(call_stack_position == 0) {
 			break;
 		}
-		if(CUR.recurse_place == START) {
+		switch(CUR.recurse_place) {
+		case START:
 			if(!get_hit_point(CUR.ray_start, CUR.ray_direction, CUR.material, CUR.hit_point, CUR.normal)) {
 				call_stack_position -= 1;
-				continue;
+				break;
 			}
-			vec3 diffuse;
-			vec3 specular;
-			vec3 ambient;
+			vec3 diffuse = vec3(0.0f);
+			vec3 specular = vec3(0.0f);
+			vec3 ambient = vec3(0.0f);
 			shade(CUR.ray_start, CUR.ray_direction, CUR.material, CUR.hit_point, CUR.normal, diffuse, specular, ambient);
-			color.rgb += (diffuse + specular + ambient) * CUR.amount;
-			call_stack_position -= 1;
-			continue;
+			CUR.normal = normalize(CUR.normal);
+			CUR.ray_direction = normalize(CUR.ray_direction);
+			color.rgb += (diffuse + specular + ambient) * CUR.amount / 256.0f;
 			if(call_stack_position == MAX_RECURSION_DEPTH) {
 				call_stack_position -= 1;
-				continue;
+				break;
 			}
-			CUR.ray_direction = normalize(CUR.ray_direction);
 			CUR.reflected_ray_direction = reflect(CUR.ray_direction, CUR.normal);
 			CUR.refracted_ray_direction = refract(CUR.ray_direction, CUR.normal, CUR.eta/material_refract[CUR.material]);
+			// color = vec4(CUR.eta/material_refract[CUR.material], 0.0f, 0.0f, 1.0f);
 			CUR.recurse_place = REFLECT;
 			NEXT.recurse_place = START;
 			NEXT.ray_start = CUR.hit_point;
@@ -269,19 +294,19 @@ void trace() {
 			NEXT.amount = CUR.amount * material_reflect[CUR.material];
 			NEXT.eta = CUR.eta;
 			call_stack_position += 1;
-			continue;
-		} else if(CUR.recurse_place == REFLECT) {
+			break;
+		case REFLECT:
 			CUR.recurse_place = REFRACT;
 			NEXT.recurse_place = START;
-			NEXT.ray_start = CUR.hit_point;
+			NEXT.ray_start = CUR.hit_point - 2.0f*CUR.normal*SHADOW_RAY_EPSILON;
 			NEXT.ray_direction = CUR.refracted_ray_direction;
 			NEXT.amount = CUR.amount * material_refract_ratios[CUR.material];
 			NEXT.eta = material_refract[CUR.material];
 			call_stack_position += 1;
-			continue;
-		} else /* CUR.recurse_place == REFRACT */ {
+			break;
+		case REFRACT:
 			call_stack_position -= 1;
-			continue;
+			break;
 		}
 	}
 }
@@ -292,42 +317,15 @@ void main() {
 	vec2 near_size = vec2(camera.near_plane.y - camera.near_plane.x, camera.near_plane.w - camera.near_plane.z);
 	vec2 ray_target = (((vertex_position.xy/2.0f)+0.5f) * near_size) + vec2(camera.near_plane.x, camera.near_plane.z);
 	
-	vec3 ray_end = camera.position + (camera.gaze)*camera.near_distance + vec3(ray_target, 0.0f);
+	vec3 camera_right = cross(camera.gaze, camera.up);
+
+	vec3 coord_vertical = ray_target.y*camera.up;
+	vec3 coord_horizontal = ray_target.x*camera_right;
+
+	vec3 ray_end = camera.position + (camera.gaze)*camera.near_distance + coord_vertical + coord_horizontal;
 	vec3 ray_start = camera.position;
-	vec3 ray_direction = ray_end - ray_start;/*
-	float t;
-	int id;
-	bool is_sphere;
-	vec3 normal;
-	bool collide = get_collision(ray_start, ray_direction, t, id, is_sphere, normal);
-	if(!collide) {
-		color = vec4(background_color, 1.0f);
-		return;
-	}
-	vec3 hit_point = CAST(ray_start, ray_direction, t) + normal*SHADOW_RAY_EPSILON;
-	bool shadow = is_shadowed(hit_point, light_positions[0] - hit_point);
-	if(shadow) {
-		color = vec4(material_ambient[id] * ambient_light, 1.0f);
-		return;
-	}
-	int material_id = 0;
-	if(is_sphere) {
-		material_id = sphere_materials[id];
-	} else {
-		material_id = material_ids[id];
-	}
-	vec3 diffuse;
-	vec3 specular;
-	
-	do_shading(hit_point, normal, material_id, ray_start, ray_direction, diffuse, specular);
-	color = vec4((diffuse + specular)/256.0f, 1.0f);
-	if(material_reflect[material_id] != vec3(0.0f, 0.0f, 0.0f)) {
-		color = DEBUG_COLOR;
-	}
-	
-	ray_direction = normalize(ray_direction);
-	vec3 reflect_ray_direction = reflect(ray_direction, normal);
-	vec3 refract_ray_direction = refract(ray_direction, normal, material_refract[material_id]);*/
+	vec3 ray_direction = normalize(ray_end - ray_start);
+	// ray_start = ray_end;
 	
 	CallStackEntry current_entry = CallStackEntry(
 		START,

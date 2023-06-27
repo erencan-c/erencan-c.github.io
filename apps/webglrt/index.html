@@ -12,6 +12,29 @@
 			<label style="display: inline;">FPS:</label>
 			<input style="display: inline;" id="fps-counter" disabled="disabled" type="text" name="FPS" value="0"/>
 		</div>
+        <div>
+            <label>Transparency of the sphere:</label>
+            <input type="range" id="transparency" value="0"/>
+        </div>
+        <div>
+            <label>Scene File:</label>
+            <input id="scene-file" type="file" />
+        </div>
+        <hr/>
+        <div>
+            <p style="display: inline;">
+                How to use:<br/>
+                W: Forward<br/>
+                A: Left<br/>
+                S: Backward<br/>
+                D: Right<br/>
+                G: Start/Stop<br/>
+                Q: Rotate Left<br/>
+                E: Rotate Right<br/>
+                R: Rotate Up<br/>
+                F: Rotate Down<br/>
+            </p>
+        </div>
         <canvas id="screen" width="800" height="800"></canvas>
     </body>
 </html>

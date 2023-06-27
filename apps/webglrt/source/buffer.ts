@@ -4,6 +4,7 @@ export {Buffer};
 function log_gl(gl: WebGL2RenderingContext, context: string = "") {
     let gl_error = gl.getError();
     if(gl_error !== 0) {
+        alert(`Error in ${context}: ${gl_error}`);
         throw new Error(`Error in ${context}: ${gl_error}`);
     }
 }
@@ -20,8 +21,6 @@ class Buffer {
 
         this.array = gl.createVertexArray();
         gl.bindVertexArray(this.array);
-
-        console.log(positions);
 
         gl.enableVertexAttribArray(shader.getAttribLocation(gl, 'world_position'));
         gl.vertexAttribPointer(
