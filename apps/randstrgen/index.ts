@@ -21,8 +21,8 @@ function convert_ascii_range(start: number, end: number): string[] {
 function random_select_element<T>(arr: T[]): T {
 	let len = arr.length;
 	let rand = len;
-	while(rand === len)
-		rand = Math.floor(Math.random()*len);
+	while (rand === len)
+		rand = Math.floor(Math.random() * len);
 	return arr[rand];
 }
 
@@ -33,19 +33,19 @@ const NUMBERS = convert_ascii_range('0'.charCodeAt(0), '9'.charCodeAt(0));
 function generate_string() {
 	const len = parseInt(length_input.value);
 	let character_list: string[] = [...LETTERS];
-	if(include_captials.checked)
+	if (include_captials.checked)
 		character_list = character_list.concat(CAPITALS);
-	if(include_numbers.checked)
+	if (include_numbers.checked)
 		character_list = character_list.concat(NUMBERS);
-	if(include_underline.checked)
+	if (include_underline.checked)
 		character_list.push('_');
-	if(include_dash.checked)
+	if (include_dash.checked)
 		character_list.push('-');
-	if(include_pound.checked)
+	if (include_pound.checked)
 		character_list.push('#');
-	if(include_dollar.checked)
+	if (include_dollar.checked)
 		character_list.push('$');
-	if(include_dot.checked)
+	if (include_dot.checked)
 		character_list.push('.');
 	const str: string[] = Array.apply(null, new Array(len)).map((_) => random_select_element(character_list));
 

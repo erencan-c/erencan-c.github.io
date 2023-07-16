@@ -1,63 +1,68 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Random String Generator</title>
-		<meta charset="utf-8"/>
-		<script src="./index.js" defer="defer"></script>
-		<!-- <link rel="stylesheet" href="https://unpkg.com/7.css"/> -->
-      <link rel="stylesheet" href="/navbar.css"/>
-	</head>
-	<body>
+
+<head>
+	<title>Random String Generator</title>
+	<meta charset="utf-8" />
+	<script src="./index.js" defer="defer"></script>
+	<!-- <link rel="stylesheet" href="https://unpkg.com/7.css"/> -->
+	<link rel="stylesheet" href="/navbar.css" />
+</head>
+
+<body>
+	<div>
+		<nav>
+			<a class="nav-link" href="/index.html"><button>Ana Sayfa</button></a>
+			<a class="nav-link" href="/posts/posts.html"><button>Gönderiler</button></a>
+			<a class="nav-link" href="/about.html"><button>Hakkımda</button></a>
+		</nav>
+	</div>
+	<hr />
+	<div>
+		<textarea id="textbox" readonly="readonly" style="width: 100vw; resize: vertical;"
+			placeholder="String comes here"></textarea>
+	</div>
+	<div>
+		<button onclick="generate_string();" style="width: 100vw;">Generate String and Copy to Clipboard</button>
+	</div>
+	<div>
+		<label style="display: inline;">Length: </label>
+		<input id="length" type="number" value="10" style="display: inline; width: 80vw; height: 1em;" />
+	</div>
+	<fieldset>
+		<legend>Options:</legend>
 		<div>
-			<nav>
-				 <a class="nav-link" href="/index.html"><button>Ana Sayfa</button></a>
-				 <a class="nav-link" href="/posts/posts.html"><button>Gönderiler</button></a>
-				 <a class="nav-link" href="/about.html"><button>Hakkımda</button></a>
-			</nav>
-	  </div>
-	  <hr/>
-		<div>
-			<textarea id="textbox" readonly="readonly" style="width: 100vw; resize: vertical;" placeholder="String comes here"></textarea>
+			<input id="include-numbers" type="checkbox" name="include-numbers" value="include-numbers" checked="checked" />
+			<label for="include-numbers">Include numbers</label>
 		</div>
 		<div>
-			<button onclick="generate_string();" style="width: 100vw;">Generate String and Copy to Clipboard</button>
+			<input id="include-capitals" type="checkbox" name="include-capitals" value="include-capitals"
+				checked="checked" />
+			<label for="include-capitals">Include capital letters</label>
 		</div>
-		<div>
-			<label style="display: inline;">Length: </label>
-			<input id="length" type="number" value="10" style="display: inline; width: 80vw; height: 1em;"/>
-		</div>
-		<fieldset>
-			<legend>Options:</legend>
+		<div style="margin-left: 1vw;">
 			<div>
-				<input id="include-numbers" type="checkbox" name="include-numbers" value="include-numbers" checked="checked"/>
-				<label for="include-numbers">Include numbers</label>
+				<input id="include-underline" type="checkbox" name="include-underline" value="include-underline" />
+				<label for="include-underline">Include underline (_)</label>
 			</div>
 			<div>
-				<input id="include-capitals" type="checkbox" name="include-capitals" value="include-capitals" checked="checked"/>
-				<label for="include-capitals">Include capital letters</label>
+				<input id="include-dash" type="checkbox" name="include-dash" value="include-dash" />
+				<label for="include-dash">Include dash (-)</label>
 			</div>
-			<div style="margin-left: 1vw;">
-				<div>
-					<input id="include-underline" type="checkbox" name="include-underline" value="include-underline"/>
-					<label for="include-underline">Include underline (_)</label>
-				</div>
-				<div>
-					<input id="include-dash" type="checkbox" name="include-dash" value="include-dash"/>
-					<label for="include-dash">Include dash (-)</label>
-				</div>
-				<div>
-					<input id="include-pound" type="checkbox" name="include-pound" value="include-pound"/>
-					<label for="include-pound">Include hash/pound (#)</label>
-				</div>
-				<div>
-					<input id="include-dollar" type="checkbox" name="include-dollar" value="include-dollar"/>
-					<label for="include-dollar">Include dollar sign ($)</label>
-				</div>
-				<div>
-					<input id="include-dot" type="checkbox" name="include-dot" value="include-dot"/>
-					<label for="include-dot">Include dot (.)</label>
-				</div>
+			<div>
+				<input id="include-pound" type="checkbox" name="include-pound" value="include-pound" />
+				<label for="include-pound">Include hash/pound (#)</label>
 			</div>
-		</fieldset>
-	</body>
+			<div>
+				<input id="include-dollar" type="checkbox" name="include-dollar" value="include-dollar" />
+				<label for="include-dollar">Include dollar sign ($)</label>
+			</div>
+			<div>
+				<input id="include-dot" type="checkbox" name="include-dot" value="include-dot" />
+				<label for="include-dot">Include dot (.)</label>
+			</div>
+		</div>
+	</fieldset>
+</body>
+
 </html>
