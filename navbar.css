@@ -18,7 +18,7 @@
 body {
     font-family: serif !important;
     font-size: var(--responsive-font-size) !important;
-    background-color: #c0c0c0;
+    background-color: #ffffff;
 }
 
 nav {
@@ -34,4 +34,25 @@ nav {
 button {
     font-family: serif !important;
     font-size: var(--responsive-font-size) !important;
+}
+
+label {
+    font-size: var(--responsive-font-size) !important;
+}
+
+input {
+    font-size: var(--responsive-font-size) !important;
+}
+
+legend {
+    font-size: var(--responsive-font-size) !important;
+}
+
+input[type="checkbox"] {
+    width: var(--responsive-font-size);
+    height: var(--responsive-font-size);
+}
+
+textarea {
+    font-size: var(--responsive-font-size);
 }
