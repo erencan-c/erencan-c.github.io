@@ -1,20 +1,24 @@
 var a_penalty = document.getElementById('a-penalty');
 var b_penalty = document.getElementById('b-penalty');
 var result_penalty = document.getElementById('result-101');
-var diff = 0;
+var penalty_a = 0;
+var penalty_b = 0;
 function reset_penalty() {
     result_penalty.innerHTML = '';
-    diff = 0;
+    penalty_a = 0;
+    penalty_b = 0;
 }
 function calculate_penalties() {
+    var diff = penalty_a - penalty_b;
+    var status_text = "A: ".concat(penalty_a, "\nB: ").concat(penalty_b, "\n");
     if (diff < 0) {
-        alert("B'nin cezas\u0131 ".concat(-diff, " daha fazla"));
+        alert(status_text + "B'nin cezas\u0131 ".concat(-diff, " daha fazla"));
     }
     else if (diff > 0) {
-        alert("A'n\u0131n cezas\u0131 ".concat(diff, " daha fazla"));
+        alert(status_text + "A'n\u0131n cezas\u0131 ".concat(diff, " daha fazla"));
     }
     else {
-        alert("Cezalar E\u015Fit");
+        alert(status_text + "Cezalar E\u015Fit");
     }
 }
 function enter_penalty() {
@@ -32,5 +36,17 @@ function enter_penalty() {
     else {
         b = Number(b_penalty.value);
     }
-    diff += a - b;
+    penalty_a += a;
+    penalty_b += b;
+    a_penalty.value = '';
+    b_penalty.value = '';
+    display_penalty(a, b);
+}
+function calculate_offset(val) {
+    var str = val.toString();
+    var offset = 5 - str.length;
+    return ' '.repeat(offset);
+}
+function display_penalty(a, b) {
+    result_penalty.innerHTML += "".concat(calculate_offset(a)).concat(a, " ").concat(calculate_offset(b)).concat(b, "\n");
 }
