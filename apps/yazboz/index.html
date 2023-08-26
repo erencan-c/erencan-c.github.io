@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+	<head>
+		<title>Okey Yazboz Tahtası</title>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, user-scalable=no"/>
+		<link rel="stylesheet" href="/apps/yazboz/index.css"/>
+		<script src="/apps/yazboz/normal.js" defer="defer"></script>
+		<script src="/apps/yazboz/101.js" defer="defer"></script>
+	</head>
+	<body>
+		<button id="switch" onclick="switch_mode();">101</button>
+		<div id="normal">
+			<textarea id="result-normal" readonly="readonly"></textarea>
+			<div id="normal-buttons">
+				<div id="buttonrow-1">
+					<button onclick="a(6);">A6</button><!--
+					--><button onclick="a(2);">A2</button>
+				</div>
+				<div id="buttonrow-2">
+					<button onclick="b(6);">B6</button><!--
+					--><button onclick="b(2);">B2</button>
+				</div>
+				<div id="buttonrow-3">
+					<button onclick="update();">Khv</button><!--
+				--><button onclick="reset();">↻</button>
+				</div>
+			</div>
+		</div>
+		<div id="yuzbir">
+			<textarea id="result-101" readonly="readonly">zz</textarea>
+			<div id="yuzbir-inputs">
+				<div id="inputs">	
+					<button class="penalty" style="font-size: calc(var(--button-size) / 2);" onclick="reset_penalty();">↻</button>
+					<button class="penalty" onclick="calculate_penalties();">Hesapla</button>
+					<label class="penalty" for="a-penalty">A</label>
+					<input class="penalty" id="a-penalty" type="number"/>
+					<label class="penalty" for="b-penalty">B</label>
+					<input class="penalty" id="b-penalty" type="number"/>
+					<button class="penalty" onclick="enter_penalty();">Ceza Gir</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			let mode = 0;
+			const normal = document.getElementById('normal');
+			const yuzbir = document.getElementById('yuzbir');
+			const button = document.getElementById('switch');
+			function switch_mode() {
+				if(mode == 0) {
+					mode = 1;
+				} else {
+					mode = 0;
+				}
+				reset();
+				reset_penalty();
+				display_mode();
+			}
+			function display_mode() {
+				if(mode == 0) {
+					normal.style.display = 'none';
+					yuzbir.style.display = 'flex';
+					button.innerHTML = 'Normal';
+				} else if(mode == 1) {
+					normal.style.display = 'flex';
+					yuzbir.style.display = 'none';
+					button.innerHTML = '101';
+				}
+			}
+			display_mode();
+		</script>
+	</body>
+</html>

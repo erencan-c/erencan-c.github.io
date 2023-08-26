@@ -1,0 +1,61 @@
+#result-101 {
+	font-family: monospace;
+	font-size: calc(100vw / 24);
+	width: calc(50vw + var(--button-size));
+	height: 100vh;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+}
+
+#yuzbir {
+	display: flex;
+	flex-wrap: wrap;
+	flex-flow: column;
+}
+
+#yuzbir-inputs {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	position: absolute;
+	top: calc(100vh - 4 * var(--button-size) - 4px);
+	left: calc(50vw + var(--button-size));
+	width: 50vw;
+}
+
+#inputs {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	width: calc(50vw - var(--button-size));
+	top: 0px;
+	left: 0px;
+	position: relative;
+}
+
+label.penalty {
+	height: calc(var(--button-size) / 4);
+	width: calc(50vw - var(--button-size));
+	margin: 0px;
+	padding: 0px;
+	text-align: right;
+}
+
+input.penalty {
+	height: calc(var(--button-size) / 4);
+	width: calc(50vw - var(--button-size));
+	margin: 0px;
+	padding: 0px;
+	border: 1px inset black;
+	text-align: right;
+}
+
+button.penalty {
+	font-size: calc(var(--button-size) / 5);
+	margin: 0px;
+	padding: 0px;
+	top: 0px;
+	left: 0px;
+	position: relative;
+}

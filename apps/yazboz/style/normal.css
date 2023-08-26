@@ -1,0 +1,34 @@
+#kahveci {
+	font-size: calc(var(--button-size) / 5);
+}
+
+#result-normal {
+	font-family: monospace;
+	font-size: calc(100vw / 6);
+	width: calc(50vw);
+	height: 100vh;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+}
+
+#normal {
+	display: flex;
+}
+
+#normal-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	flex-flow: column;
+	position: absolute;
+	top: calc(100vh - 3 * var(--button-size));
+	left: calc(2 * var(--button-size));
+}
+
+#buttonrow-1 {
+	flex: 0;
+}
+
+#buttonrow-2 {
+	flex: 0;
+}
