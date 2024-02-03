@@ -1,40 +1,22 @@
-export { Scene };
-class Camera {
-    position;
-    gaze;
-    up;
-    nearPlane;
-    nearDistance;
-}
-class Material {
-    ambient;
-    diffuse;
-    specular;
-    reflect;
-    refract;
-    refractRatio;
-    phong;
-}
-class Scene {
-    backgroundColor;
-    shadowRayEpsilon;
-    maxRecursionDepth;
-    camera;
-    ambient_light;
-    lightPositions;
-    lightIntensities;
-    materials;
-    vertexData;
-    vertices;
-    materialIds;
-    sphereMaterials;
-    sphereCenters;
-    sphereRadii;
-    constructor(gl, xml_object) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Scene = void 0;
+var Camera = /** @class */ (function () {
+    function Camera() {
+    }
+    return Camera;
+}());
+var Material = /** @class */ (function () {
+    function Material() {
+    }
+    return Material;
+}());
+var Scene = /** @class */ (function () {
+    function Scene(gl, xml_object) {
         this.backgroundColor = new Float32Array(xml_object.querySelector('BackgroundColor').innerHTML.trim().split(/\s+/).map(parseFloat));
         this.shadowRayEpsilon = parseFloat(xml_object.querySelector('ShadowRayEpsilon').innerHTML.trim());
         this.maxRecursionDepth = parseFloat(xml_object.querySelector('MaxRecursionDepth').innerHTML.trim());
-        let cam = xml_object.querySelector('Camera');
+        var cam = xml_object.querySelector('Camera');
         this.camera = {
             'position': new Float32Array(cam.querySelector('Position').innerHTML.trim().split(/\s+/).map(parseFloat)),
             'gaze': new Float32Array(cam.querySelector('Gaze').innerHTML.trim().split(/\s+/).map(parseFloat)),
@@ -42,13 +24,13 @@ class Scene {
             'nearPlane': new Float32Array(cam.querySelector('NearPlane').innerHTML.trim().split(/\s+/).map(parseFloat)),
             'nearDistance': parseFloat(cam.querySelector('NearDistance').innerHTML.trim()),
         };
-        let lights = xml_object.querySelector('Lights');
+        var lights = xml_object.querySelector('Lights');
         this.ambient_light = new Float32Array(lights.querySelector('AmbientLight').innerHTML.trim().split(/\s+/).map(parseFloat));
-        let light_positions = [];
-        let light_intensities = [];
-        lights.querySelectorAll('PointLight').forEach(light => {
-            let pos = light.querySelector('Position').innerHTML.trim().split(/\s+/).map(parseFloat);
-            let inten = light.querySelector('Intensity').innerHTML.trim().split(/\s+/).map(parseFloat);
+        var light_positions = [];
+        var light_intensities = [];
+        lights.querySelectorAll('PointLight').forEach(function (light) {
+            var pos = light.querySelector('Position').innerHTML.trim().split(/\s+/).map(parseFloat);
+            var inten = light.querySelector('Intensity').innerHTML.trim().split(/\s+/).map(parseFloat);
             light_positions.push(pos[0]);
             light_positions.push(pos[1]);
             light_positions.push(pos[2]);
@@ -58,23 +40,23 @@ class Scene {
         });
         this.lightPositions = new Float32Array(light_positions);
         this.lightIntensities = new Float32Array(light_intensities);
-        let materials = xml_object.querySelector('Materials');
-        let ambient_reflectances = [];
-        let diffuse_reflectances = [];
-        let specular_reflectances = [];
-        let reflectances = [];
-        let refractances = [];
-        let refractance_ratios = [];
-        let phong_exponents = [];
-        materials.querySelectorAll('Material').forEach(material => {
-            let ambient = material.querySelector('AmbientReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
-            let diffuse = material.querySelector('DiffuseReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
-            let specular = material.querySelector('SpecularReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
-            let reflect = material.querySelector('MirrorReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
-            let hasRefract = material.querySelector('Refractance') !== null;
-            let refract = hasRefract ? parseFloat(material.querySelector('Refractance').innerHTML.trim()) : 1.0;
-            let refract_ratio = hasRefract ? material.querySelector('RefractanceRatio').innerHTML.trim().split(/\s+/).map(parseFloat) : [0, 0, 0];
-            let phong = parseFloat(material.querySelector('PhongExponent').innerHTML.trim());
+        var materials = xml_object.querySelector('Materials');
+        var ambient_reflectances = [];
+        var diffuse_reflectances = [];
+        var specular_reflectances = [];
+        var reflectances = [];
+        var refractances = [];
+        var refractance_ratios = [];
+        var phong_exponents = [];
+        materials.querySelectorAll('Material').forEach(function (material) {
+            var ambient = material.querySelector('AmbientReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
+            var diffuse = material.querySelector('DiffuseReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
+            var specular = material.querySelector('SpecularReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
+            var reflect = material.querySelector('MirrorReflectance').innerHTML.trim().split(/\s+/).map(parseFloat);
+            var hasRefract = material.querySelector('Refractance') !== null;
+            var refract = hasRefract ? parseFloat(material.querySelector('Refractance').innerHTML.trim()) : 1.0;
+            var refract_ratio = hasRefract ? material.querySelector('RefractanceRatio').innerHTML.trim().split(/\s+/).map(parseFloat) : [0, 0, 0];
+            var phong = parseFloat(material.querySelector('PhongExponent').innerHTML.trim());
             ambient_reflectances.push(ambient[0]);
             ambient_reflectances.push(ambient[1]);
             ambient_reflectances.push(ambient[2]);
@@ -103,28 +85,28 @@ class Scene {
             'phong': new Float32Array(phong_exponents)
         };
         this.vertexData = new Float32Array(xml_object.querySelector('VertexData').innerHTML.trim().split(/\s+/).map(parseFloat));
-        let m_id = [];
-        let v_id = [];
-        let objects = xml_object.querySelector('Objects');
-        objects.querySelectorAll('Mesh').forEach(mesh => {
-            let material_id = parseFloat(mesh.querySelector('Material').innerHTML) - 1;
-            let vertex_ids = mesh.querySelector('Faces').innerHTML.trim().split(/\s+/).map(v => parseFloat(v) - 1);
-            for (let i = 0; i < vertex_ids.length / 3; i++) {
+        var m_id = [];
+        var v_id = [];
+        var objects = xml_object.querySelector('Objects');
+        objects.querySelectorAll('Mesh').forEach(function (mesh) {
+            var material_id = parseFloat(mesh.querySelector('Material').innerHTML) - 1;
+            var vertex_ids = mesh.querySelector('Faces').innerHTML.trim().split(/\s+/).map(function (v) { return parseFloat(v) - 1; });
+            for (var i = 0; i < vertex_ids.length / 3; i++) {
                 m_id.push(material_id);
             }
-            for (let i = 0; i < vertex_ids.length; i++) {
+            for (var i = 0; i < vertex_ids.length; i++) {
                 v_id.push(vertex_ids[i]);
             }
         });
         this.materialIds = new Int32Array(m_id);
         this.vertices = new Int32Array(v_id);
-        let s_m = [];
-        let s_c = [];
-        let s_r = [];
-        objects.querySelectorAll('Sphere').forEach(sphere => {
-            let material_id = parseFloat(sphere.querySelector('Material').innerHTML) - 1;
-            let center_id = parseFloat(sphere.querySelector('Center').innerHTML) - 1;
-            let radius = parseFloat(sphere.querySelector('Radius').innerHTML);
+        var s_m = [];
+        var s_c = [];
+        var s_r = [];
+        objects.querySelectorAll('Sphere').forEach(function (sphere) {
+            var material_id = parseFloat(sphere.querySelector('Material').innerHTML) - 1;
+            var center_id = parseFloat(sphere.querySelector('Center').innerHTML) - 1;
+            var radius = parseFloat(sphere.querySelector('Radius').innerHTML);
             s_m.push(material_id);
             s_c.push(center_id);
             s_r.push(radius);
@@ -138,7 +120,7 @@ class Scene {
         this.sphereRadii = new Float32Array(s_r);
         console.log(this);
     }
-    sendScene(gl, shader) {
+    Scene.prototype.sendScene = function (gl, shader) {
         gl.uniform3f(shader.getUniformLocation(gl, 'ambient_light'), this.ambient_light[0], this.ambient_light[1], this.ambient_light[2]);
         gl.uniform3f(shader.getUniformLocation(gl, 'background_color'), this.backgroundColor[0], this.backgroundColor[1], this.backgroundColor[2]);
         gl.uniform3f(shader.getUniformLocation(gl, 'camera.gaze'), this.camera.gaze[0], this.camera.gaze[1], this.camera.gaze[2]);
@@ -161,6 +143,7 @@ class Scene {
         gl.uniform1iv(shader.getUniformLocation(gl, 'sphere_materials'), this.sphereMaterials);
         gl.uniform1iv(shader.getUniformLocation(gl, 'sphere_centers'), this.sphereCenters);
         gl.uniform1fv(shader.getUniformLocation(gl, 'sphere_radii'), this.sphereRadii);
-    }
-}
-//# sourceMappingURL=scene.js.map
+    };
+    return Scene;
+}());
+exports.Scene = Scene;

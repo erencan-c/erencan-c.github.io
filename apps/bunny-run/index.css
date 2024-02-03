@@ -1,0 +1,19 @@
+label {
+	font-family: monospace;
+	font-size: 20px;
+	width: 100px;
+	display: inline-block;
+}
+
+#game {
+	border: 2px outset black;
+}
+
+#site > div {
+	margin: auto;
+	width: 100%;
+}
+
+#site {
+	text-align: center;
+}

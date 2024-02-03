@@ -1,4 +1,5 @@
 'use strict';
+document.documentElement.requestFullscreen();
 var Matrix = /** @class */ (function () {
     function Matrix(r, c, dat) {
         this.row = r;

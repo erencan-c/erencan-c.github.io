@@ -1,0 +1,9 @@
+.flex-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.fill-width {
+	flex: 1;
+};
+

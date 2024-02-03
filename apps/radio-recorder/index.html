@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Radio Recorder</title>
+	<meta charset="utf-8"/>
+	<script src="/apps/radio-recorder/index.js" defer="defer"></script>
+	<link rel="stylesheet" href="/navbar.css" />
+	<link rel="stylesheet" href="/apps/radio-recorder/index.css" />
+</head>
+<body>
+	<header><h3>Radio Recorder</h3></header>
+	<label for="url-input">URL</label>
+	<br/>
+	<div class="flex-container">
+		<input id="url-input" class="fill-width" type="text" placeholder="URL" value="https://nmicenotrt.mediatriple.net/trt_turku.aac"/>
+	</div>
+	<br/>
+	<label for="filename">Filename</label>
+	<br/>
+	<div class="flex-container">
+		<input id="filename" class="fill-width" type="url" placeholder="Filename"/>
+	</div>
+	<br/>
+	<div class="flex-container">
+		<button class="fill-width" id="play" onclick="play();">Play</button>
+		<button class="fill-width" id="stop" onclick="stop_cb();">Stop</button>
+		<button class="fill-width" id="record" onclick="record();">Record</button>
+		<button class="fill-width" id="stop-record" onclick="stop_record();">Stop Record</button>
+	</div>
+</body>
+</html>

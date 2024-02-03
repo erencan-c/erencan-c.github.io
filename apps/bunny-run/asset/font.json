@@ -1,0 +1,28 @@
+{
+	"name": "Comic Mono",
+	"size": 256,
+	"bold": false,
+	"italic": false,
+	"width": 1131,
+	"height": 389,
+	"characters": {
+	  "0":{"x":758,"y":0,"width":123,"height":193,"originX":-10,"originY":185,"advance":140},
+	  "1":{"x":881,"y":0,"width":127,"height":192,"originX":-8,"originY":188,"advance":140},
+	  "2":{"x":1008,"y":0,"width":123,"height":192,"originX":-9,"originY":186,"advance":140},
+	  "3":{"x":639,"y":0,"width":119,"height":194,"originX":-14,"originY":186,"advance":140},
+	  "4":{"x":383,"y":0,"width":127,"height":195,"originX":-8,"originY":187,"advance":140},
+	  "5":{"x":125,"y":198,"width":124,"height":190,"originX":-10,"originY":184,"advance":140},
+	  "6":{"x":126,"y":0,"width":126,"height":197,"originX":-8,"originY":190,"advance":140},
+	  "7":{"x":0,"y":198,"width":125,"height":191,"originX":-10,"originY":184,"advance":140},
+	  "8":{"x":510,"y":0,"width":129,"height":194,"originX":-6,"originY":185,"advance":140},
+	  "9":{"x":0,"y":0,"width":126,"height":198,"originX":-8,"originY":191,"advance":140},
+	  "S":{"x":252,"y":0,"width":131,"height":196,"originX":-5,"originY":187,"advance":140},
+	  "c":{"x":249,"y":198,"width":117,"height":146,"originX":-12,"originY":136,"advance":140},
+	  "o":{"x":485,"y":198,"width":120,"height":143,"originX":-9,"originY":135,"advance":140},
+	  "r":{"x":605,"y":198,"width":110,"height":140,"originX":-17,"originY":133,"advance":140},
+	  "e":{"x":366,"y":198,"width":119,"height":144,"originX":-12,"originY":135,"advance":140},
+	  ":":{"x":715,"y":198,"width":36,"height":111,"originX":-53,"originY":120,"advance":140},
+	  " ":{"x":833,"y":198,"width":3,"height":3,"originX":1,"originY":1,"advance":140},
+	  "-":{"x":751,"y":198,"width":82,"height":26,"originX":-29,"originY":87,"advance":140}
+	}
+  }
