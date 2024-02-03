@@ -4,8 +4,8 @@ import * as math from './math.js';
 
 const fontMaxHeight = Math.max(...Object.keys(fontInfo.characters).map(c => fontInfo.characters[c].height));
 
-const vertexSource = await (await fetch('../shader/text.vs')).text();
-const fragmentSource = await (await fetch('../shader/text.fs')).text();
+const vertexSource = await (await fetch('shader/text.vs')).text();
+const fragmentSource = await (await fetch('shader/text.fs')).text();
 const alphabetAtlas = (() => {
 	const texture = gl.createTexture();
 	gl.bindTexture(gl.TEXTURE_2D, texture);

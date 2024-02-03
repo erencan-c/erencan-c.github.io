@@ -39,10 +39,10 @@ export const fontInfo: {
 			"advance": number
 		}
 	}
-} = await ((await fetch('../asset/font.json')).json());
+} = await ((await fetch('asset/font.json')).json());
 
 export const fontData = new Image();
-fontData.src = '../asset/font.png';
+fontData.src = 'asset/font.png';
 await loadImage(fontData);
 
 export const planeData = {
@@ -110,7 +110,7 @@ export const cubeData = {
 		22, 23, 20,
 	])
 };
-const bunnyFile = await ((await (fetch('../asset/bunny.obj'))).text());
+const bunnyFile = await ((await (fetch('asset/bunny.obj'))).text());
 
 export const bunnyData = (() => {
 

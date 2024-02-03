@@ -9,8 +9,8 @@ import * as math from './math.js';
 // performance, directly embedding the shader files is actually better. However, module
 // system already decreases the performance, so seperating shaders should not cause
 // too much of a problem. Also, this codebase is not meant to be fast.
-const meshVertexShaderSource = await (await fetch('../shader/mesh.vs')).text();
-const meshFragmentShaderSource = await (await fetch('../shader/mesh.fs')).text();
+const meshVertexShaderSource = await (await fetch('shader/mesh.vs')).text();
+const meshFragmentShaderSource = await (await fetch('shader/mesh.fs')).text();
 const meshShader = new Shader(meshVertexShaderSource, meshFragmentShaderSource);
 
 export class Scene {

@@ -17,9 +17,9 @@ export let settings = {
 };
 export const gl = canvas.getContext('webgl2');
 export const keys = {};
-export const fontInfo = await ((await fetch('../asset/font.json')).json());
+export const fontInfo = await ((await fetch('asset/font.json')).json());
 export const fontData = new Image();
-fontData.src = '../asset/font.png';
+fontData.src = 'asset/font.png';
 await loadImage(fontData);
 export const planeData = {
     vertex: new Float32Array([
@@ -75,7 +75,7 @@ export const cubeData = {
         22, 23, 20,
     ])
 };
-const bunnyFile = await ((await (fetch('../asset/bunny.obj'))).text());
+const bunnyFile = await ((await (fetch('asset/bunny.obj'))).text());
 export const bunnyData = (() => {
     const bunnyVerticesJagged = [];
     const bunnyNormalsJagged = [];

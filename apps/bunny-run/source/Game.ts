@@ -28,7 +28,7 @@ export class Game {
 		this.scene = new Scene(camera, Object.values(meshes));
 		this.meshes = meshes;
 		let backgroundImage = new Image();
-		backgroundImage.src = '../asset/sky.jpg';
+		backgroundImage.src = 'asset/sky.jpg';
 		// Setting the background image texture asynchonously
 		backgroundImage.onload = () => {
 			meshes.background.setTexture(backgroundImage);
