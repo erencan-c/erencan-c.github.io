@@ -3,7 +3,7 @@ import * as g from './globals.js';
 import * as math from './math.js';
 import { renderText } from "./Text.js";
 // Left, middle, right
-const boxHorizontalPositions = [-2, 0, 2];
+export const boxHorizontalPositions = [-2, 0, 2];
 export class Game {
     scene;
     meshes;

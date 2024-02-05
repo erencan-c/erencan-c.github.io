@@ -1,10 +1,8 @@
-import { Scene } from './Scene.js'
 import { Mesh } from './Mesh.js'
 import * as g from './globals.js'
 import * as math from './math.js';
 import { Camera } from './Camera.js';
-import { renderText } from './Text.js';
-import { Game } from './Game.js';
+import { Game, boxHorizontalPositions } from './Game.js';
 
 let game: Game;
 let currentFrameHandler: number;
@@ -141,7 +139,11 @@ function touchStart(event: TouchEvent) {
 	const firstTouch = event.touches[0];
 	touchStartPosition.x = firstTouch.clientX;
 	touchStartPosition.y = firstTouch.clientY;
+	const t = firstTouch.clientX / g.settings.width;
+	game.horizontal = boxHorizontalPositions[0] * (1 - t) + boxHorizontalPositions[2] * t;
 }
+
+const deadRegion = 0.1;
 
 function touchMove(event: TouchEvent) {
 	if (!touchStartPosition.x || !touchStartPosition.y) {
@@ -159,26 +161,8 @@ function touchMove(event: TouchEvent) {
 		y: touchStartPosition.y - up.y,
 	};
 
-	if (Math.abs(diff.x) > Math.abs(diff.y)) {
-		if (Math.abs(diff.x) < 0.1) {
-			if (g.keys['KeyA']) {
-				delete g.keys['KeyA'];
-			}
-			if (g.keys['KeyD']) {
-				delete g.keys['KeyD'];
-			}
-		} else if (diff.x < 0) {
-			g.keys['KeyD'] = true;
-			if (g.keys['KeyA']) {
-				delete g.keys['KeyA'];
-			}
-		} else {
-			g.keys['KeyA'] = true;
-			if (g.keys['KeyD']) {
-				delete g.keys['KeyD'];
-			}
-		}
-	}
+	const t = (up.x / g.settings.width) / (1.0 - 2 * deadRegion);
+	game.horizontal = math.clamp(boxHorizontalPositions[0] * (1 - t) + boxHorizontalPositions[2] * t, boxHorizontalPositions[0], boxHorizontalPositions[2]);
 
 	if (Math.abs(diff.x) < Math.abs(diff.y)) {
 		restartGestureLength += diff.y;
