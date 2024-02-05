@@ -6,14 +6,21 @@ label {
 }
 
 #game {
-	border: 2px outset black;
+	/* border: 2px outset black; */
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
-
+/* 
 #site > div {
 	margin: auto;
 	width: 100%;
-}
-
+} */
+/* 
 #site {
 	text-align: center;
+} */
+
+body {
+	margin: 0;
 }

@@ -6,16 +6,15 @@ export const loadImage = async (img) => {
         };
     });
 };
-export const settingsGetters = {
-    width: document.querySelector('#width'),
-    height: document.querySelector('#height')
-};
 export let settings = {
-    width: Number.parseInt(settingsGetters.width.value || "800"),
-    height: Number.parseInt(settingsGetters.height.value || "800"),
+    width: window.innerWidth,
+    height: window.innerHeight,
     running: true
 };
 export const gl = canvas.getContext('webgl2');
+canvas.setAttribute('width', settings.width.toString());
+canvas.setAttribute('height', settings.height.toString());
+gl.viewport(0, 0, settings.width, settings.height);
 export const keys = {};
 export const fontInfo = await ((await fetch('asset/font.json')).json());
 export const fontData = new Image();
@@ -109,7 +108,8 @@ export const bunnyData = (() => {
     const bunnyIndices = bunnyIndicesJagged.flat();
     return { vertex: new Float32Array(bunnyBuffer), indices: new Uint32Array(bunnyIndices) };
 })();
-export const backgroundStartTranslation = new Float32Array([0, 3, -49]);
+export const backgroundStartTranslation = new Float32Array([0, 2, -49.5]);
+export const backgroundStartScaling = new Float32Array([50, 50, 50]);
 export const groundStartTranslation = new Float32Array([0, 0, -49.5]);
 export const bunnyStartTranslation = new Float32Array([0, 0.5, -2.2]);
 export const cameraStartTranslation = new Float32Array([0, 2, 0]);

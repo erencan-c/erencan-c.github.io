@@ -182,7 +182,7 @@ export class Game {
         // this expression will actually be the value of the green channel of the text color.
         // To prevent the small precision errors' long decimals, we can round our number. 100 is a nice
         // constant to multiply, the speed of increase of the digits are nice for it. Feel free to change it.
-        renderText(`Score: ${Math.round(this.points * 100)}`, new Float32Array([1, Number(g.settings.running), 0]));
+        renderText(`Score: ${Math.round(this.points * 100)}`, new Float32Array([1, Number(g.settings.running), 0]), g.settings.height * 0.05);
     }
 }
 //# sourceMappingURL=Game.js.map

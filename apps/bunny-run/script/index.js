@@ -58,21 +58,81 @@ function keyUp(event) {
 }
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
-g.settingsGetters.width.addEventListener('input', e => {
+let touchStartPosition = { x: null, y: null };
+function touchStart(event) {
+    const firstTouch = event.touches[0];
+    touchStartPosition.x = firstTouch.clientX;
+    touchStartPosition.y = firstTouch.clientY;
+}
+function touchMove(event) {
+    if (!touchStartPosition.x || !touchStartPosition.y) {
+        return;
+    }
+    let up = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+    };
+    console.log(touchStartPosition, up);
+    let diff = {
+        x: touchStartPosition.x - up.x,
+        y: touchStartPosition.y - up.y,
+    };
+    if (Math.abs(diff.x) > Math.abs(diff.y)) {
+        if (Math.abs(diff.x) < 0.1) {
+            if (g.keys['KeyA']) {
+                delete g.keys['KeyA'];
+            }
+            if (g.keys['KeyD']) {
+                delete g.keys['KeyD'];
+            }
+        }
+        else if (diff.x < 0) {
+            g.keys['KeyD'] = true;
+            if (g.keys['KeyA']) {
+                delete g.keys['KeyA'];
+            }
+        }
+        else {
+            g.keys['KeyA'] = true;
+            if (g.keys['KeyD']) {
+                delete g.keys['KeyD'];
+            }
+        }
+    }
+    touchStartPosition = up;
+}
+function touchEnd(event) {
+    if (g.keys['KeyA']) {
+        delete g.keys['KeyA'];
+    }
+    if (g.keys['KeyD']) {
+        delete g.keys['KeyD'];
+    }
+    touchStartPosition.x = null;
+    touchStartPosition.y = null;
+}
+document.addEventListener('touchstart', touchStart, false);
+document.addEventListener('touchmove', touchMove, false);
+document.addEventListener('touchend', touchEnd, false);
+addEventListener('resize', e => {
     // Default width (and height) is 800 pixels.
     // Note that null coelescing operator (??) is problematic
     // sinc an invalid input (like a text) passes the operator while giving NaN
     // as the parseInt output, making the width (and height) NaN.
-    g.settings.width = Number.parseInt(g.settingsGetters.width.value) || 800;
+    // g.settings.width = Number.parseInt(g.settingsGetters.width.value) || 800;
+    g.settings.width = window.innerWidth;
+    g.settings.height = window.innerHeight;
     g.canvas.setAttribute('width', g.settings.width.toString());
-    g.gl.viewport(0, 0, g.settings.width, g.settings.height);
-    game.scene.camera.aspectRatio = g.settings.width / g.settings.height;
-});
-g.settingsGetters.height.addEventListener('input', e => {
-    g.settings.height = Number.parseInt(g.settingsGetters.height.value) || 800;
     g.canvas.setAttribute('height', g.settings.height.toString());
     g.gl.viewport(0, 0, g.settings.width, g.settings.height);
-    game.scene.camera.aspectRatio = g.settings.width / g.settings.height;
+    const aspectRatio = g.settings.width / g.settings.height;
+    game.scene.camera.aspectRatio = aspectRatio;
+    meshes.background.scaling = new Float32Array([
+        g.backgroundStartScaling[0] * aspectRatio,
+        g.backgroundStartScaling[1],
+        g.backgroundStartScaling[2]
+    ]);
+    console.log(g.settings);
 });
 game.restart();
 // We start from time 0
