@@ -134,6 +134,8 @@ document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
 
 let touchStartPosition: { x: number, y: number } = { x: null, y: null };
+let restarted = false;
+let restartGestureLength = 0;
 
 function touchStart(event: TouchEvent) {
 	const firstTouch = event.touches[0];
@@ -151,7 +153,6 @@ function touchMove(event: TouchEvent) {
 		y: event.touches[0].clientY,
 	};
 
-	console.log(touchStartPosition, up);
 
 	let diff = {
 		x: touchStartPosition.x - up.x,
@@ -179,6 +180,16 @@ function touchMove(event: TouchEvent) {
 		}
 	}
 
+	if (Math.abs(diff.x) < Math.abs(diff.y)) {
+		restartGestureLength += diff.y;
+		if (restarted) {
+			restartGestureLength = 0;
+		} else if (restartGestureLength < -100) {
+			game.restart();
+			restarted = true;
+		}
+	}
+
 	touchStartPosition = up;
 }
 
@@ -189,8 +200,13 @@ function touchEnd(event: TouchEvent) {
 	if (g.keys['KeyD']) {
 		delete g.keys['KeyD'];
 	}
+	if (g.keys['KeyR']) {
+		delete g.keys['KeyR'];
+	}
 	touchStartPosition.x = null;
 	touchStartPosition.y = null;
+	restarted = false;
+	restartGestureLength = 0;
 }
 
 document.addEventListener('touchstart', touchStart, false);
@@ -216,8 +232,6 @@ addEventListener('resize', e => {
 		g.backgroundStartScaling[1],
 		g.backgroundStartScaling[2]
 	]);
-	console.log(g.settings);
-
 });
 
 game.restart();

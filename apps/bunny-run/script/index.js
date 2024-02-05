@@ -59,6 +59,8 @@ function keyUp(event) {
 document.addEventListener('keydown', keyDown);
 document.addEventListener('keyup', keyUp);
 let touchStartPosition = { x: null, y: null };
+let restarted = false;
+let restartGestureLength = 0;
 function touchStart(event) {
     const firstTouch = event.touches[0];
     touchStartPosition.x = firstTouch.clientX;
@@ -72,7 +74,6 @@ function touchMove(event) {
         x: event.touches[0].clientX,
         y: event.touches[0].clientY,
     };
-    console.log(touchStartPosition, up);
     let diff = {
         x: touchStartPosition.x - up.x,
         y: touchStartPosition.y - up.y,
@@ -99,6 +100,16 @@ function touchMove(event) {
             }
         }
     }
+    if (Math.abs(diff.x) < Math.abs(diff.y)) {
+        restartGestureLength += diff.y;
+        if (restarted) {
+            restartGestureLength = 0;
+        }
+        else if (restartGestureLength < -100) {
+            game.restart();
+            restarted = true;
+        }
+    }
     touchStartPosition = up;
 }
 function touchEnd(event) {
@@ -108,8 +119,13 @@ function touchEnd(event) {
     if (g.keys['KeyD']) {
         delete g.keys['KeyD'];
     }
+    if (g.keys['KeyR']) {
+        delete g.keys['KeyR'];
+    }
     touchStartPosition.x = null;
     touchStartPosition.y = null;
+    restarted = false;
+    restartGestureLength = 0;
 }
 document.addEventListener('touchstart', touchStart, false);
 document.addEventListener('touchmove', touchMove, false);
@@ -132,7 +148,6 @@ addEventListener('resize', e => {
         g.backgroundStartScaling[1],
         g.backgroundStartScaling[2]
     ]);
-    console.log(g.settings);
 });
 game.restart();
 // We start from time 0
